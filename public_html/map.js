@@ -7,7 +7,6 @@
 /* global google */
 
 var latlng = new google.maps.LatLng(-34.397, 150.644);
-
 var typeId = google.maps.MapTypeId.ROADMAP;
 var mapOptions =
         {
@@ -21,7 +20,29 @@ function initialize() {
     map = new google.maps.Map(mapDiv, mapOptions);
 }
 ;
-//
+
+
+
+// -- action and buttons code -- //
+function lock0()
+{
+    var mapOptions = {
+     center: new google.maps.LatLng(0, 0),
+     zoom: 4,
+     mapTypeId: google.maps.MapTypeId.ROADMAP
+     };
+     map = new google.maps.Map(document.getElementById("map"), mapOptions);
+     
+}
+
+function twoandtwo(){
+    map.panTo(new google.maps.LatLng(2, 2));
+}
+
+
+
+// -- dom actuib listeber
+google.maps.event.addDomListener(window, 'load', initialize);
 google.maps.event.addDomListener(window, 'load', initialize);
 
 
