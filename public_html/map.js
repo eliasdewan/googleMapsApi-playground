@@ -42,10 +42,10 @@ function twoandtwo() {
 
 
 function toSatellite() {
-    map.setMapTypeId('terrain');
+    map.setMapTypeId('satellite');
 }
 function toRoadmap() {
-    map.setMapTypeId('satellite');
+    map.setMapTypeId('roadmap');
 }
 function toHybrid() {
     map.setMapTypeId('hybrid');
