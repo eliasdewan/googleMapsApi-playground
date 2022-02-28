@@ -27,16 +27,42 @@ function initialize() {
 function lock0()
 {
     var mapOptions = {
-     center: new google.maps.LatLng(0, 0),
-     zoom: 4,
-     mapTypeId: google.maps.MapTypeId.ROADMAP
-     };
-     map = new google.maps.Map(document.getElementById("map"), mapOptions);
-     
+        center: new google.maps.LatLng(0, 0),
+        zoom: 4,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
 }
 
-function twoandtwo(){
+function twoandtwo() {
     map.panTo(new google.maps.LatLng(2, 2));
+    map.setZoom(2);
+}
+
+
+function toSatellite() {
+    map.setMapTypeId('terrain');
+}
+function toRoadmap() {
+    map.setMapTypeId('satellite');
+}
+function toHybrid() {
+    map.setMapTypeId('hybrid');
+}
+function toTerrain() {
+    map.setMapTypeId('terrain');
+}
+
+
+
+
+function setText() {
+    var lon = prompt('Longitude');
+    var lat = prompt('Latitude');
+    map.panTo(new google.maps.LatLng(lon, lat));
+    map.setMapTypeId('terrain');
+    document.getElementById('button').innerHTML = lon + ',' + lat;
 }
 
 
