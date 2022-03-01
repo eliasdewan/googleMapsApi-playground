@@ -27,18 +27,28 @@ function initialize() {
 function lock0()
 {
     var mapOptions = {
-        center: new google.maps.LatLng(0, 0),
-        zoom: 4,
+        // coordinates for hydepark
+        center: new google.maps.LatLng(51.51, -0.17),
+        zoom: 12,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
 }
 
-function twoandtwo() {
-    map.panTo(new google.maps.LatLng(2, 2));
-    map.setZoom(2);
+function africa() {
+    map.panTo(new google.maps.LatLng(5, 20));
+    map.setZoom(3);
 }
+function random() {
+    var latitude = Math.floor(Math.random() * 90*2*10000)/10000-90; // -90 to 90
+    var longitude = Math.floor(Math.random() * 180*2*10000)/10000-180; // -180 to 90
+    map.panTo(new google.maps.LatLng(latitude, longitude));
+   // map.setZoom(3);
+    
+   //alert(latitude+" "+longitude);
+}
+
 
 
 function toSatellite() {
@@ -57,12 +67,12 @@ function toTerrain() {
 
 
 
-function setText() {
+function setCoordinate() {
     var lon = prompt('Longitude');
     var lat = prompt('Latitude');
     map.panTo(new google.maps.LatLng(lon, lat));
     map.setMapTypeId('terrain');
-    document.getElementById('button').innerHTML = lon + ',' + lat;
+    document.getElementById('coordbutton').innerHTML = 'Change coordinate | '+ lon + ',' + lat;
 }
 
 

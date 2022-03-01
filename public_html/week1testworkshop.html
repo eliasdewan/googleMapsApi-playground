@@ -10,7 +10,7 @@ and open the template in the editor.
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <style>
-            hpml, body, #map {
+            html, body, #map {
                 width: 400px;
                 height: 400px;
                 border: 2px solid #001;
@@ -25,17 +25,20 @@ and open the template in the editor.
     </head>
     <body>
         <div  id='map'></div>
-        <button onclick='lock0()' name='btn'> Location 0 </button>
-        <button onclick='twoandtwo()' name='btn'> 2-2 </button>
-        <button onclick='setText()' id='button'> Change this </button>
-        
-        
-        
-        
-        <button onclick='toSatellite()'> Satellite </button>
-        <button onclick='toRoadmap()'> Roadmap </button>
-        <button onclick='toHybrid()'> Hybrid </button>
-        <button onclick='toTerrain()'> Terrain </button>
-        
+        <button onclick='lock0()'> London </button>
+        <button onclick='africa()'> Africa </button>
+        <button onclick='setCoordinate()' id='coordbutton'> Use coordinates </button>
+         <button onclick='random()'> Random </button>
+
+
+
+        <div>
+            Set MapType
+            <button onclick='toRoadmap()'> Road Map </button>
+            <button onclick='toTerrain()'> Terrain </button>
+            <button onclick='toSatellite()'> Satellite </button>
+            <button onclick='toHybrid()'> Hybrid </button>
+            
+        </div>
     </body>
 </html>
