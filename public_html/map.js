@@ -12,7 +12,19 @@ var mapOptions =
         {
             center: latlng,
             zoom: 8,
-            mapTypeId: typeId
+            mapTypeId: typeId,
+            disableDefaultUI: true,
+            mapTypeControl: true,
+            mapTypeControlOptions: {
+                style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                position: google.maps.ControlPosition.TOP,
+                mapTypeIds: [
+                    google.maps.MapTypeId.ROADMAP,
+                    google.maps.MapTypeId.HYBRID,
+                    google.maps.MapTypeId.SATELLITE,
+                    google.maps.MapTypeId.TERRAIN
+                ]
+            }
         };
 var map; // Main map variable
 function initialize() {
@@ -41,12 +53,12 @@ function africa() {
     map.setZoom(3);
 }
 function random() {
-    var latitude = Math.floor(Math.random() * 90*2*10000)/10000-90; // -90 to 90
-    var longitude = Math.floor(Math.random() * 180*2*10000)/10000-180; // -180 to 90
+    var latitude = Math.floor(Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
+    var longitude = Math.floor(Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
     map.panTo(new google.maps.LatLng(latitude, longitude));
-   // map.setZoom(3);
-    
-   //alert(latitude+" "+longitude);
+    // map.setZoom(3);
+
+    //alert(latitude+" "+longitude);
 }
 
 
@@ -64,10 +76,17 @@ function toTerrain() {
     map.setMapTypeId('terrain');
 }
 function zoomIn() {
-    map.setZoom(map.getZoom()+1);
+    map.setZoom(map.getZoom() + 1);
 }
 function zoomOut() {
-    map.setZoom(map.getZoom()-1);
+    map.setZoom(map.getZoom() - 1);
+}
+
+function circle() {
+    map.panTo(ma.get)
+}
+function rectangle() {
+    map.panTo()
 }
 
 
@@ -78,7 +97,7 @@ function setCoordinate() {
     var lat = prompt('Latitude');
     map.panTo(new google.maps.LatLng(lon, lat));
     map.setMapTypeId('terrain');
-    document.getElementById('coordbutton').innerHTML = 'Change coordinate | '+ lon + ',' + lat;
+    document.getElementById('coordbutton').innerHTML = 'Change coordinate | ' + lon + ',' + lat;
 }
 
 
