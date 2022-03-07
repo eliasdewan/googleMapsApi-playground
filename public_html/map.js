@@ -30,8 +30,43 @@ var map; // Main map variable
 function initialize() {
     var mapDiv = document.getElementById('map');
     map = new google.maps.Map(mapDiv, mapOptions);
+
+    const cityCircle = new google.maps.Circle({
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+        map,
+        center: latlng,
+        radius: 5000,
+    });
+    var marker = new google.maps.Marker({
+        position: {lat: -34.4, lng: 150.6},
+        map: map,
+        title: 'I am here',
+        icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 15
+        }
+    });
+
+
+    var markerGreen = new google.maps.Marker({
+        position: {lat: -34.5, lng: 150.5},
+        map: map,
+        title: 'I am here Green',
+        icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                //can be pink, yellow or purple
+    });
+    var InfoWindow = new google.maps.InfoWindow({content: 'This is my green marker!'});
+    // we can use full html divs and set their class and customise in html style tags,(the class)
+    google.maps.event.addListener(markerGreen,'click', function(){InfoWindow.open(map,markerGreen)});
+    
 }
 ;
+
+
 
 
 
@@ -46,7 +81,13 @@ function lock0()
     };
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
+
 }
+
+
+
+
+
 
 function africa() {
     map.panTo(new google.maps.LatLng(5, 20));
@@ -59,6 +100,13 @@ function random() {
     // map.setZoom(3);
 
     //alert(latitude+" "+longitude);
+    
+    // adding the marker
+    new google.maps.Marker({
+    position: ma,
+    map,
+    title: "Hello World!"
+  });
 }
 
 
@@ -83,10 +131,10 @@ function zoomOut() {
 }
 
 function circle() {
-    map.panTo(ma.get)
+    map.panTo(map.get);
 }
 function rectangle() {
-    map.panTo()
+    map.panTo();
 }
 
 
