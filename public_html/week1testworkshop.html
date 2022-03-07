@@ -23,22 +23,25 @@ and open the template in the editor.
         <script type="text/javascript" src='map.js'></script>
 
     </head>
-    <body>
-        <div  id='map'></div>
+    <body>  <!-- this is to for map div and some buttons right after-->
+        <div  id='map'></div> 
         <button onclick='lock0()'> London </button>
-        <button onclick='africa()'> Africa </button>
+       <!-- <button onclick='africa()'> Africa </button> -->
         <button onclick='setCoordinate()' id='coordbutton'> Use coordinates </button>
-         <button onclick='random()'> Random </button>
+        <button onclick='random()'> Random </button>
+        <button onclick='zoomIn()'> Zoom in </button>
+        <button onclick='zoomOut()'> Zoom out </button>
+        
 
 
 
-        <div>
-            Set MapType
+        <div> <!-- this is to for the buttons of map types-->
+            Set MapType : 
             <button onclick='toRoadmap()'> Road Map </button>
             <button onclick='toTerrain()'> Terrain </button>
             <button onclick='toSatellite()'> Satellite </button>
             <button onclick='toHybrid()'> Hybrid </button>
-            
+
         </div>
     </body>
 </html>

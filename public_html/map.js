@@ -14,7 +14,7 @@ var mapOptions =
             zoom: 8,
             mapTypeId: typeId
         };
-var map;
+var map; // Main map variable
 function initialize() {
     var mapDiv = document.getElementById('map');
     map = new google.maps.Map(mapDiv, mapOptions);
@@ -62,6 +62,12 @@ function toHybrid() {
 }
 function toTerrain() {
     map.setMapTypeId('terrain');
+}
+function zoomIn() {
+    map.setZoom(map.getZoom()+1);
+}
+function zoomOut() {
+    map.setZoom(map.getZoom()-1);
 }
 
 
