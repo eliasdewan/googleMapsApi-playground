@@ -194,25 +194,37 @@ function randomMarker() {
     var delay = 500;
     map.panTo({lat: orilat, lng: orilng});
     // angle - radius - orginal lat and length - delay and pan to original location
-    while (angle < 359) {
-        //alert("workig" + angle);
-        //    setInterval()(function () {
-        console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
-       var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
+    // while (angle < 359) {
+    //alert("workig" + angle);
+    setInterval(function(){
+        // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
+        //var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
+        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.sin(angle) * radius};
         new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
         angle++;
-        delay += 500;
-        //    }, delay);
+        //console.log(angle);
+        //      console.log("angle");
+        //delay += 500;
+    }, 500);
+
+    //setInterval(()=>{console.log("messgae");
+    //console.log("win2");
 
 
-        //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
-        //map.panTo(location);
-    }
-    
-    
 
 
-    // setInterval(function () {alert("check" + angle);}, delay);
+
+
+
+
+            //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
+            //map.panTo(location);
+            //  }
+
+
+
+
+            // setInterval(function () {alert("check" + angle);}, delay);
 }
 
 function setCoordinate() {
