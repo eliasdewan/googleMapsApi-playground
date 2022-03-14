@@ -83,13 +83,7 @@ function lock0()
     };
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
 
-
 }
-
-
-
-
-
 
 function africa() {
     map.panTo(new google.maps.LatLng(5, 20));
@@ -123,7 +117,6 @@ function random() {
 }
 
 
-
 function toSatellite() {
     map.setMapTypeId('satellite');
 }
@@ -146,20 +139,31 @@ function zoomOut() {
 function circle() {
     var lat = -34.397;
     var lng = 150.644;
-    //var position = {lat: lat, lng: lng};
-    //map.panTo(position);
+    map.setZoom(6);
+
     map.panTo({lat: lat - 1, lng: lng - 1});
+    new google.maps.Marker({position: {lat: lat - 1, lng: lng - 1}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 2, lng: lng - 2}), 1000);
+    new google.maps.Marker({position: {lat: lat - 2, lng: lng - 2}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 3, lng: lng - 1}), 2000);
+    new google.maps.Marker({position: {lat: lat - 3, lng: lng - 1}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 4, lng: lng}), 3000);
+    new google.maps.Marker({position: {lat: lat - 4, lng: lng}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 3, lng: lng + 1}), 4000);
+    new google.maps.Marker({position: {lat: lat - 3, lng: lng + 1}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 2, lng: lng + 2}), 5000);
+    new google.maps.Marker({position: {lat: lat - 2, lng: lng + 2}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat - 1, lng: lng + 1}), 6000);
+    new google.maps.Marker({position: {lat: lat - 1, lng: lng + 1}, map, title: "Randmo marker "});
     setTimeout(() => map.panTo({lat: lat, lng: lng}), 7000);
+    new google.maps.Marker({position: {lat: lat, lng: lng}, map, title: "Randmo marker "});
 }
 
+
+
+
 function rectangle() {
-    //alert("for showing message");
+//alert("for showing message");
     var lat = -34.397;
     var lng = 150.644;
     //var position = {lat: lat, lng: lng};
@@ -168,11 +172,38 @@ function rectangle() {
     setTimeout(() => map.panTo({lat: lat - 1, lng: lng - 1}), 1000);
     setTimeout(() => map.panTo({lat: lat, lng: lng - 1}), 2000);
     setTimeout(() => map.panTo({lat: lat, lng: lng}), 3000);
-
 }
 
+//X = 5 + cos(5) * 5;
+//Y = 5 + sin(5) * 5;
+
+//X := originX + cos(angle)*radius;
+//Y := originY + sin(angle)*radius;
 function randomMarker() {
-    map.panTo();
+    //alert("started");
+    var angle = 0;
+    var radius = 1;
+    var orilat = -34.397;
+    var orilng = 150.644;
+    var delay = 500;
+    map.panTo({lat: orilat, lng: orilng});
+    // angle - radius - orginal lat and length - delay and pan to original location
+    //  while (angle < 359) {
+    //alert("workig" + angle);
+    setInterval()(function () {
+        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.cos(angle) * radius};
+        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
+        angle++;
+        delay += 500;
+    }, delay);
+
+
+    //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
+    //map.panTo(location);
+    //}
+
+
+    // setInterval(function () {alert("check" + angle);}, delay);
 }
 
 
