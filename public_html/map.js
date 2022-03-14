@@ -39,7 +39,7 @@ function initialize() {
         fillOpacity: 0.35,
         map,
         center: latlng,
-        radius: 5000,
+        radius: 5000
     });
     var marker = new google.maps.Marker({
         position: {lat: -34.4, lng: 150.6},
@@ -112,9 +112,9 @@ function random() {
         title: "Randmo marker " + randomCount
 
     });
-    
+
     //Message
-    var InfoWindow = new google.maps.InfoWindow({content: 'This is random marker n '+randomCount+' !'});
+    var InfoWindow = new google.maps.InfoWindow({content: 'This is random marker n ' + randomCount + ' !'});
     // we can use full html divs and set their class and customise in html style tags,(the class)
     google.maps.event.addListener(randomMarker, 'click', function () {
         InfoWindow.open(map, randomMarker);
@@ -144,11 +144,22 @@ function zoomOut() {
 }
 
 function circle() {
-    map.panTo(map.get);
+    // map.panTo(map.get);
 }
+
 function rectangle() {
-    map.panTo();
+    //alert("for showing message");
+    var lat = -34.397;
+    var lng = 150.644;
+    //var position = {lat: lat, lng: lng};
+    //map.panTo(position);
+    map.panTo({lat: lat - 1, lng: lng});
+    setTimeout(() => map.panTo({lat: lat - 1, lng: lng - 1}), 1000);
+    setTimeout(() => map.panTo({lat: lat, lng: lng - 1}), 2000);
+    setTimeout(() => map.panTo({lat: lat, lng: lng}), 3000);
+
 }
+
 function randomMarker() {
     map.panTo();
 }
