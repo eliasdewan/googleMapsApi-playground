@@ -179,6 +179,10 @@ function rectangle() {
 
 //X := originX + cos(angle)*radius;
 //Y := originY + sin(angle)*radius;
+
+
+
+
 function randomMarker() {
     //alert("started");
     var angle = 0;
@@ -188,26 +192,23 @@ function randomMarker() {
     var delay = 500;
     map.panTo({lat: orilat, lng: orilng});
     // angle - radius - orginal lat and length - delay and pan to original location
-    //  while (angle < 359) {
-    //alert("workig" + angle);
-    setInterval()(function () {
-        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.cos(angle) * radius};
-        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
-        angle++;
-        delay += 500;
-    }, delay);
+    while (angle < 359) {
+        //alert("workig" + angle);
+        setInterval()(function () {
+            var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.cos(angle) * radius};
+            new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
+            angle++;
+            delay += 500;
+        }, delay);
 
 
-    //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
-    //map.panTo(location);
-    //}
+        //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
+        //map.panTo(location);
+    }
 
 
     // setInterval(function () {alert("check" + angle);}, delay);
 }
-
-
-
 
 function setCoordinate() {
     var lon = prompt('Longitude');
