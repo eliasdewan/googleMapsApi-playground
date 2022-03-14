@@ -179,6 +179,8 @@ function rectangle() {
 
 //X := originX + cos(angle)*radius;
 //Y := originY + sin(angle)*radius;
+//Math.PI * 2 * angle/360
+//x = Math.cos(Math.PI * 2 * angle/360); and y = Math.sin(Math.PI * 2 * angle/360);
 
 
 
@@ -194,17 +196,20 @@ function randomMarker() {
     // angle - radius - orginal lat and length - delay and pan to original location
     while (angle < 359) {
         //alert("workig" + angle);
-        setInterval()(function () {
-            var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.cos(angle) * radius};
-            new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
-            angle++;
-            delay += 500;
-        }, delay);
+        //    setInterval()(function () {
+        console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
+       var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
+        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
+        angle++;
+        delay += 500;
+        //    }, delay);
 
 
         //var location = {lng: orilat + Math.cos(angle) * radius, lat: orilng + Math.cos(angle) * radius};
         //map.panTo(location);
     }
+    
+    
 
 
     // setInterval(function () {alert("check" + angle);}, delay);
