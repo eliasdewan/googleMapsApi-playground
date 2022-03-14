@@ -61,8 +61,10 @@ function initialize() {
     });
     var InfoWindow = new google.maps.InfoWindow({content: 'This is my green marker!'});
     // we can use full html divs and set their class and customise in html style tags,(the class)
-    google.maps.event.addListener(markerGreen,'click', function(){InfoWindow.open(map,markerGreen)});
-    
+    google.maps.event.addListener(markerGreen, 'click', function () {
+        InfoWindow.open(map, markerGreen);
+    });
+
 }
 ;
 
@@ -93,6 +95,8 @@ function africa() {
     map.panTo(new google.maps.LatLng(5, 20));
     map.setZoom(3);
 }
+//Loacation pan to and marker
+var randomCount = 1;
 function random() {
     var latitude = Math.floor(Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
     var longitude = Math.floor(Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
@@ -100,13 +104,22 @@ function random() {
     // map.setZoom(3);
 
     //alert(latitude+" "+longitude);
-    
+
     // adding the marker
-    new google.maps.Marker({
-    position: ma,
-    map,
-    title: "Hello World!"
-  });
+    var randomMarker = new google.maps.Marker({
+        position: {lat: latitude, lng: longitude},
+        map,
+        title: "Randmo marker " + randomCount
+
+    });
+    
+    //Message
+    var InfoWindow = new google.maps.InfoWindow({content: 'This is random marker n '+randomCount+' !'});
+    // we can use full html divs and set their class and customise in html style tags,(the class)
+    google.maps.event.addListener(randomMarker, 'click', function () {
+        InfoWindow.open(map, randomMarker);
+    });
+    randomCount++;
 }
 
 
@@ -134,6 +147,9 @@ function circle() {
     map.panTo(map.get);
 }
 function rectangle() {
+    map.panTo();
+}
+function randomMarker() {
     map.panTo();
 }
 
