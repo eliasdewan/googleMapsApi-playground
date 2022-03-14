@@ -144,7 +144,18 @@ function zoomOut() {
 }
 
 function circle() {
-    // map.panTo(map.get);
+    var lat = -34.397;
+    var lng = 150.644;
+    //var position = {lat: lat, lng: lng};
+    //map.panTo(position);
+    map.panTo({lat: lat - 1, lng: lng - 1});
+    setTimeout(() => map.panTo({lat: lat - 2, lng: lng - 2}), 1000);
+    setTimeout(() => map.panTo({lat: lat - 3, lng: lng - 1}), 2000);
+    setTimeout(() => map.panTo({lat: lat - 4, lng: lng}), 3000);
+    setTimeout(() => map.panTo({lat: lat - 3, lng: lng + 1}), 4000);
+    setTimeout(() => map.panTo({lat: lat - 2, lng: lng + 2}), 5000);
+    setTimeout(() => map.panTo({lat: lat - 1, lng: lng + 1}), 6000);
+    setTimeout(() => map.panTo({lat: lat, lng: lng}), 7000);
 }
 
 function rectangle() {
