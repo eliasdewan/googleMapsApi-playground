@@ -31,6 +31,8 @@ function initialize() {
     var mapDiv = document.getElementById('map');
     map = new google.maps.Map(mapDiv, mapOptions);
 
+
+// -- ADDED CODE FROM HERE FOR MARKERS --
     const cityCircle = new google.maps.Circle({
         strokeColor: "#FF0000",
         strokeOpacity: 0.8,
@@ -63,6 +65,30 @@ function initialize() {
     // we can use full html divs and set their class and customise in html style tags,(the class)
     google.maps.event.addListener(markerGreen, 'click', function () {
         InfoWindow.open(map, markerGreen);
+    });
+
+    // -- COPIED CODE FROM HERE 
+
+    let infoWindow = new google.maps.InfoWindow({
+        content: "Click the map to get Lat/Lng!",
+        position: latlng
+    });
+
+    infoWindow.open(map);
+
+    // Configure the click listener.
+    map.addListener("click", (mapsMouseEvent) => {
+        // Close the current InfoWindow.
+        infoWindow.close();
+
+        // Create a new InfoWindow.
+        infoWindow = new google.maps.InfoWindow({
+            position: mapsMouseEvent.latLng,
+        });
+        infoWindow.setContent(
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+                );
+        infoWindow.open(map);
     });
 
 }
@@ -139,24 +165,25 @@ function zoomOut() {
 function circle() {
     var lat = -34.397;
     var lng = 150.644;
+    map.panTo({lat: lat, lng: lng});
     map.setZoom(6);
+    var angle = 0;
+    var radius = 1;
 
-    map.panTo({lat: lat - 1, lng: lng - 1});
-    new google.maps.Marker({position: {lat: lat - 1, lng: lng - 1}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 2, lng: lng - 2}), 1000);
-    new google.maps.Marker({position: {lat: lat - 2, lng: lng - 2}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 3, lng: lng - 1}), 2000);
-    new google.maps.Marker({position: {lat: lat - 3, lng: lng - 1}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 4, lng: lng}), 3000);
-    new google.maps.Marker({position: {lat: lat - 4, lng: lng}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 3, lng: lng + 1}), 4000);
-    new google.maps.Marker({position: {lat: lat - 3, lng: lng + 1}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 2, lng: lng + 2}), 5000);
-    new google.maps.Marker({position: {lat: lat - 2, lng: lng + 2}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat - 1, lng: lng + 1}), 6000);
-    new google.maps.Marker({position: {lat: lat - 1, lng: lng + 1}, map, title: "Randmo marker "});
-    setTimeout(() => map.panTo({lat: lat, lng: lng}), 7000);
-    new google.maps.Marker({position: {lat: lat, lng: lng}, map, title: "Randmo marker "});
+    var markerInterval = setInterval(function () {
+
+        // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
+        // BETTER METHOD
+        var location = {lat: lat + Math.cos(Math.PI * 2 * angle / 360), lng: lng + Math.sin(Math.PI * 2 * angle / 360)};
+        // var location = {lat: lat + Math.cos(angle) * radius, lng: lng + Math.sin(angle) * radius};
+        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
+        // map.panTo(location);
+        angle += 45;
+        if (angle > 359) {
+            clearInterval(markerInterval);
+        }
+        console.log(angle);
+    }, 1000);
 }
 
 
@@ -195,16 +222,17 @@ function randomMarker() {
     // angle - radius - orginal lat and length - delay and pan to original location
 
     //alert("workig" + angle);
-    
+
     var markerInterval = setInterval(function () {
-        if (angle > 359) {clearInterval(markerInterval);}
+        if (angle > 359) {
+            clearInterval(markerInterval);
+        }
         // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
         // BETTER METHOD
         //var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
         var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.sin(angle) * radius};
         new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
         angle++;
-        
     }, 5);
 
 
