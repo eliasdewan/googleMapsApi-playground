@@ -282,7 +282,8 @@ function streetView() {
         content: '<div id="ndiv" style="width:200px;height:200px;"></div>'
     });
     
-    marker.addListener('click',
+    //marker.addListener('click',
+    marker.addListener('mouseup',
             function () {
                 var markerLocation = {lat: marker.getPosition().lat(), lng: marker.getPosition().lng()};
                 infowindow.open(map, marker);
