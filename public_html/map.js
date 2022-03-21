@@ -36,7 +36,7 @@ function initialize() {
     //getMessageLocation();
     circleMarker();
     doughnutMarker();
-    streetView(); // London now
+    //streetView(); // London now
 }
 ;
 
@@ -132,8 +132,8 @@ function africa() {
 //Loacation pan to and marker
 var randomCount = 1;
 function random() {
-    var latitude = Math.floor(Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
-    var longitude = Math.floor(Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
+    var latitude = (Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
+    var longitude = (Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
     map.panTo(new google.maps.LatLng(latitude, longitude));
     // map.setZoom(3);
 
@@ -281,7 +281,7 @@ function streetView() {
     var infowindow = new google.maps.InfoWindow({
         content: '<div id="ndiv" style="width:200px;height:200px;"></div>'
     });
-    
+
     //marker.addListener('click',
     marker.addListener('mouseup',
             function () {
@@ -298,6 +298,36 @@ function setCoordinate() { // Prompt function to choose coordinate
     map.panTo(new google.maps.LatLng(lon, lat));
     map.setMapTypeId('terrain');
     document.getElementById('coordbutton').innerHTML = 'Change coordinate | ' + lon + ',' + lat;
+}
+
+function random100() {
+
+    var local = new google.maps.LatLng(-34.397, 150.644);
+    for (var i = 0; i < 1000; i++) {
+
+        var latitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // -90 to 90
+        var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // -180 to 90
+
+
+        var circleRadius = (2 * 2 * 100) / 100 - 2;
+       // var circleRadius = Math.sqrt(2 * 2 + 2 * 2);
+        var currentCircle = Math.sqrt(latitude * latitude + longitude * longitude);
+        
+        console.log(circleRadius);
+        console.log(currentCircle);
+
+        if (currentCircle < circleRadius) {
+            var reandomPosition = {lat: -34.397 + latitude, lng: 150.644 + longitude};
+            new google.maps.Marker({
+                position: reandomPosition,
+                map: map,
+                title: 'I am here Green',
+                icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                        //can be pink, yellow or purple
+            });
+        }
+
+    }
 }
 
 
