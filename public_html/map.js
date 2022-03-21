@@ -309,8 +309,8 @@ function random100() {
         var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // -180 to 90
 
 
-        var circleRadius = (2 * 2 * 100) / 100 - 2;
-       // var circleRadius = Math.sqrt(2 * 2 + 2 * 2);
+        var circleRadius = 2; // Max radius
+       // var circleRadius = Math.sqrt(2 * 2 + 2 * 2); // radius in x y location
         var currentCircle = Math.sqrt(latitude * latitude + longitude * longitude);
         
         console.log(circleRadius);
