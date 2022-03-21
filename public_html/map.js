@@ -30,19 +30,30 @@ var map; // Main map variable
 function initialize() {
     var mapDiv = document.getElementById('map');
     map = new google.maps.Map(mapDiv, mapOptions);
+   
+    // Other codes to run after the map load
+    mapCodeRun();
+    circleMarker();
+    doughnutMarker()
+}
+;
 
 
-// -- ADDED CODE FROM HERE FOR MARKERS --
+function circleMarker() {
     const cityCircle = new google.maps.Circle({
         strokeColor: "#FF0000",
         strokeOpacity: 0.8,
         strokeWeight: 2,
         fillColor: "#FF0000",
-        fillOpacity: 0.35,
+        fillOpacity: 0.25,
         map,
         center: latlng,
-        radius: 5000
+        radius: 50000
     });
+
+}
+
+function doughnutMarker() {
     var marker = new google.maps.Marker({
         position: {lat: -34.4, lng: 150.6},
         map: map,
@@ -52,6 +63,12 @@ function initialize() {
             scale: 15
         }
     });
+}
+
+
+
+function mapCodeRun() {// -- ADDED CODE FROM HERE FOR MARKERS -- Circle marker
+
 
 
     var markerGreen = new google.maps.Marker({
@@ -90,10 +107,7 @@ function initialize() {
                 );
         infoWindow.open(map);
     });
-
 }
-;
-
 
 
 
@@ -186,8 +200,28 @@ function circle() {
     }, 1000);
 }
 
+function randomMarker() {
+    var orilat = -34.397;
+    var orilng = 150.644;
+    map.panTo({lat: orilat, lng: orilng});
+    var angle = 0;
+    var radius = 1;
 
+    // angle - radius - orginal lat and length - delay and pan to original location
+    //alert("workig" + angle);
 
+    var markerInterval = setInterval(function () {
+        if (angle > 359) {
+            clearInterval(markerInterval);
+        }
+        // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
+        // BETTER METHOD
+        //var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
+        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.sin(angle) * radius};
+        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
+        angle++;
+    }, 5);
+}
 
 function rectangle() {
 //alert("for showing message");
@@ -212,33 +246,9 @@ function rectangle() {
 
 
 
-function randomMarker() {
-    var angle = 0;
-    var radius = 1;
-    var orilat = -34.397;
-    var orilng = 150.644;
-    var delay = 500;
-    map.panTo({lat: orilat, lng: orilng});
-    // angle - radius - orginal lat and length - delay and pan to original location
-
-    //alert("workig" + angle);
-
-    var markerInterval = setInterval(function () {
-        if (angle > 359) {
-            clearInterval(markerInterval);
-        }
-        // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
-        // BETTER METHOD
-        //var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
-        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.sin(angle) * radius};
-        new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
-        angle++;
-    }, 5);
 
 
-}
-
-function setCoordinate() {
+function setCoordinate() { // Prompt function to choose coordinate
     var lon = prompt('Longitude');
     var lat = prompt('Latitude');
     map.panTo(new google.maps.LatLng(lon, lat));
