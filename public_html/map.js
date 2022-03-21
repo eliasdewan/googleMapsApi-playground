@@ -30,11 +30,13 @@ var map; // Main map variable
 function initialize() {
     var mapDiv = document.getElementById('map');
     map = new google.maps.Map(mapDiv, mapOptions);
-   
+
     // Other codes to run after the map load
-    mapCodeRun();
+    greenMArkerInfoWindow();
+    //getMessageLocation();
     circleMarker();
-    doughnutMarker()
+    doughnutMarker();
+    streetView(); // London now
 }
 ;
 
@@ -66,11 +68,7 @@ function doughnutMarker() {
 }
 
 
-
-function mapCodeRun() {// -- ADDED CODE FROM HERE FOR MARKERS -- Circle marker
-
-
-
+function greenMArkerInfoWindow() {
     var markerGreen = new google.maps.Marker({
         position: {lat: -34.5, lng: 150.5},
         map: map,
@@ -83,9 +81,11 @@ function mapCodeRun() {// -- ADDED CODE FROM HERE FOR MARKERS -- Circle marker
     google.maps.event.addListener(markerGreen, 'click', function () {
         InfoWindow.open(map, markerGreen);
     });
+}
 
-    // -- COPIED CODE FROM HERE 
 
+function getMessageLocation() {
+    // -- COPIED CODE FROM HERE
     let infoWindow = new google.maps.InfoWindow({
         content: "Click the map to get Lat/Lng!",
         position: latlng
@@ -100,7 +100,7 @@ function mapCodeRun() {// -- ADDED CODE FROM HERE FOR MARKERS -- Circle marker
 
         // Create a new InfoWindow.
         infoWindow = new google.maps.InfoWindow({
-            position: mapsMouseEvent.latLng,
+            position: mapsMouseEvent.latLng
         });
         infoWindow.setContent(
                 JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
@@ -113,7 +113,7 @@ function mapCodeRun() {// -- ADDED CODE FROM HERE FOR MARKERS -- Circle marker
 
 
 // -- action and buttons code -- //
-function lock0()
+function london()
 {
     var mapOptions = {
         // coordinates for hydepark
@@ -243,10 +243,53 @@ function rectangle() {
 //Math.PI * 2 * angle/360
 //x = Math.cos(Math.PI * 2 * angle/360); and y = Math.sin(Math.PI * 2 * angle/360);
 
+function processSVData(data, status) {
+
+    if (status === 'OK')
+    {
 
 
+        panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv'));
 
 
+        panorama.setPosition(data.location.latLng);
+        panorama.setPov(({
+            heading: 265,
+            pitch: 0
+        }));
+
+        panorama.setVisible(true);
+
+    } else
+        alert('Street View data not found for this location.');
+
+}
+
+function streetView() {
+
+    //var london = new google.maps.LatLng(51.51, -0.17);
+    var london = {lat: 51.51, lng: -0.17};
+    map.panTo(london);
+
+    var marker = new google.maps.Marker({
+        position: london,
+        draggable: true,
+        map: map,
+        icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png"
+    });
+
+    var infowindow = new google.maps.InfoWindow({
+        content: '<div id="ndiv" style="width:200px;height:200px;"></div>'
+    });
+    
+    marker.addListener('click',
+            function () {
+                var markerLocation = {lat: marker.getPosition().lat(), lng: marker.getPosition().lng()};
+                infowindow.open(map, marker);
+                var sv = new google.maps.StreetViewService();
+                sv.getPanorama({location: markerLocation, radius: 50}, processSVData);
+            });
+}
 
 function setCoordinate() { // Prompt function to choose coordinate
     var lon = prompt('Longitude');
