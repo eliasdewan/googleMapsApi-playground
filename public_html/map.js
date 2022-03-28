@@ -37,6 +37,7 @@ function initialize() {
     circleMarker();
     doughnutMarker();
     //streetView(); // London now
+    question1();
 }
 ;
 
@@ -331,12 +332,48 @@ function random100() {
 }
 
 function question1() {
+    map.setZoom(4);
     var action = google.maps.event.addListener(map, 'click', function (e) {
+        var firstPosition = e.latLng;
+        map.panTo(firstPosition);
         var marker = new google.maps.Marker({
             position: e.latLng,
             map: map,
             icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
         });
+        // console.log(e.latLng.lat());
+        //console.log(e.latLng.lat() + 1);
+        var north = new google.maps.Marker({
+            position: {lat: e.latLng.lat() + 8.33, lng: e.latLng.lng()},
+            map: map});
+        var east = new google.maps.Marker({
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() + 8.33},
+            map: map});
+        var south = new google.maps.Marker({
+            position: {lat: e.latLng.lat() - 8.33, lng: e.latLng.lng()},
+            map: map});
+        var west = new google.maps.Marker({
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() - 8.33},
+            map: map});
+
+
+        // var midpos = google.maps.geometry.spherical.interpolate(e.latLng,east.position,0.5);
+        //console.log(east.position);
+        //console.log(e.latLng);
+
+        middleAction(north);
+        middleAction(east);
+        middleAction(south);
+        middleAction(west);
+        function middleAction(uniqueMarker) {
+            google.maps.event.addListener(uniqueMarker, 'click', function (e) {
+                console.log("Map location");
+                map.panTo(uniqueMarker.position);
+                new google.maps.Marker({
+                    position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
+                    map: map});
+            });
+        }
     });
 }
 // -- dom actuib listeber
