@@ -310,9 +310,9 @@ function random100() {
 
 
         var circleRadius = 2; // Max radius
-       // var circleRadius = Math.sqrt(2 * 2 + 2 * 2); // radius in x y location
+        // var circleRadius = Math.sqrt(2 * 2 + 2 * 2); // radius in x y location
         var currentCircle = Math.sqrt(latitude * latitude + longitude * longitude);
-        
+
         console.log(circleRadius);
         console.log(currentCircle);
 
@@ -330,8 +330,15 @@ function random100() {
     }
 }
 
-
-
+function question1() {
+    var action = google.maps.event.addListener(map, 'click', function (e) {
+        var marker = new google.maps.Marker({
+            position: e.latLng,
+            map: map,
+            icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
+        });
+    });
+}
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
 
