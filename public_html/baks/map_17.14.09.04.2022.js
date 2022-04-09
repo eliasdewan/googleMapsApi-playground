@@ -37,7 +37,7 @@ function initialize() {
     circleMarker();
     doughnutMarker();
     //streetView(); // London now
-    //question1();
+    question1();
 }
 ;
 
@@ -338,29 +338,28 @@ function random100() {
 
 function question1() {
     map.setZoom(4);
-    var firstPosition = getRandomLocation();
-   // var action = google.maps.event.addListener(map, 'click', function (e) {
+    var action = google.maps.event.addListener(map, 'click', function (e) {
         
-        //var firstPosition = e.latLng;
+        var firstPosition = e.latLng;
         map.panTo(firstPosition);
         var marker = new google.maps.Marker({
-            position: firstPosition,
+            position: e.latLng,
             map: map,
             icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
         });
         // console.log(e.latLng.lat());
         //console.log(e.latLng.lat() + 1);
         var north = new google.maps.Marker({
-            position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()},
+            position: {lat: e.latLng.lat() + 8.33, lng: e.latLng.lng()},
             map: map});
         var east = new google.maps.Marker({
-            position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33},
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() + 8.33},
             map: map});
         var south = new google.maps.Marker({
-            position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()},
+            position: {lat: e.latLng.lat() - 8.33, lng: e.latLng.lng()},
             map: map});
         var west = new google.maps.Marker({
-            position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33},
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() - 8.33},
             map: map});
 
         middleAction(north);
@@ -382,7 +381,7 @@ function question1() {
                 });
             });
         }
-   // });
+    });
     function antipode(location) {
         console.log('Clicked white original' + location);
         map.panTo(location);
