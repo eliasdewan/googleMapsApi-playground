@@ -369,9 +369,13 @@ function question1() {
             google.maps.event.addListener(uniqueMarker, 'click', function (e) {
                 console.log("Map location");
                 map.panTo(uniqueMarker.position);
-                new google.maps.Marker({
+                var middleMarker = new google.maps.Marker({
                     position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
-                    map: map});
+                    map: map,
+                    icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
+                map.panTo(middleMarker.position);
+                map.setZoom(6);
+                
             });
         }
     });
