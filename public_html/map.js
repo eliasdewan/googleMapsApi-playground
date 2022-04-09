@@ -332,76 +332,76 @@ function random100() {
 }
 
 function question1() {
-map.setZoom(4);
-        var action = google.maps.event.addListener(map, 'click', function (e) {
+    map.setZoom(4);
+    var action = google.maps.event.addListener(map, 'click', function (e) {
         var firstPosition = e.latLng;
-                map.panTo(firstPosition);
-                var marker = new google.maps.Marker({
-                position: e.latLng,
-                        map: map,
-                        icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
-                });
-                // console.log(e.latLng.lat());
-                //console.log(e.latLng.lat() + 1);
-                var north = new google.maps.Marker({
-                position: {lat: e.latLng.lat() + 8.33, lng: e.latLng.lng()},
-                        map: map});
-                var east = new google.maps.Marker({
-                position: {lat: e.latLng.lat(), lng: e.latLng.lng() + 8.33},
-                        map: map});
-                var south = new google.maps.Marker({
-                position: {lat: e.latLng.lat() - 8.33, lng: e.latLng.lng()},
-                        map: map});
-                var west = new google.maps.Marker({
-                position: {lat: e.latLng.lat(), lng: e.latLng.lng() - 8.33},
-                        map: map});
-                // var midpos = google.maps.geometry.spherical.interpolate(e.latLng,east.position,0.5);
-                //console.log(east.position);
-                //console.log(e.latLng);
-
-                middleAction(north);
-                middleAction(east);
-                middleAction(south);
-                middleAction(west);
-                function middleAction(uniqueMarker) {
-                google.maps.event.addListener(uniqueMarker, 'click', function (e) {
-                console.log("Map location");
-                        map.panTo(uniqueMarker.position);
-                        var middleMarker = new google.maps.Marker({
-                        position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
-                                map: map,
-                                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
-                        map.panTo(middleMarker.position);
-                        map.setZoom(6);
-                        google.maps.event.addListener(middleMarker, 'click', function (e) {
-                        antipode(middleMarker.position);
-                        });
-                });
-                }
+        map.panTo(firstPosition);
+        var marker = new google.maps.Marker({
+            position: e.latLng,
+            map: map,
+            icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
         });
-        function antipode(location) {
-        console.log('Clicked white original' + location);
-                map.panTo(location);
-                //console.log('latitude' + location.lat());
-                // console.log('longitidue' + location.lng());
-                //var antipodelocation = {lat: location.lat()+90, lng: location.lng()+180};
-                var antipodelat = location.lat() * - 1;
-                var antipodelng = location.lng() + 180;
-                //  if (antipodelat > 90) {
-                //      console.log('lat gone over' + antipodelat);
-                //      var antipodelat = (antipodelat - 90) * -1;
-                //      console.log('lat set to' + antipodelat);
-                //  }
+        // console.log(e.latLng.lat());
+        //console.log(e.latLng.lat() + 1);
+        var north = new google.maps.Marker({
+            position: {lat: e.latLng.lat() + 8.33, lng: e.latLng.lng()},
+            map: map});
+        var east = new google.maps.Marker({
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() + 8.33},
+            map: map});
+        var south = new google.maps.Marker({
+            position: {lat: e.latLng.lat() - 8.33, lng: e.latLng.lng()},
+            map: map});
+        var west = new google.maps.Marker({
+            position: {lat: e.latLng.lat(), lng: e.latLng.lng() - 8.33},
+            map: map});
 
-                var antipodelocation = new google.maps.LatLng(antipodelat, antipodelng);
-                console.log(antipodelocation.lat(), antipodelocation.lng());
-                map.panTo(antipodelocation);
-                var antinorth = new google.maps.Marker({position :{lat: antipodelocation.lat() + 5, lng: antipodelocation.lng()}, map: map});
-                var antieast = new google.maps.Marker({position :{lat: antipodelocation.lat() , lng: antipodelocation.lng()+ 5}, map: map});
-                var antisouth = new google.maps.Marker({position :{lat: antipodelocation.lat() - 5, lng: antipodelocation.lng()}, map: map});
-                var antiwest = new google.maps.Marker({position :{lat: antipodelocation.lat() , lng: antipodelocation.lng()-5}, map: map});
-                map.setZoom(5);
+        middleAction(north);
+        middleAction(east);
+        middleAction(south);
+        middleAction(west);
+        function middleAction(uniqueMarker) {
+            google.maps.event.addListener(uniqueMarker, 'click', function (e) {
+                console.log("Map location");
+                map.panTo(uniqueMarker.position);
+                var middleMarker = new google.maps.Marker({
+                    position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
+                    map: map,
+                    icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
+                map.panTo(middleMarker.position);
+                map.setZoom(6);
+                google.maps.event.addListener(middleMarker, 'click', function () {
+                    antipode(middleMarker.position);
+                });
+            });
         }
+    });
+    function antipode(location) {
+        console.log('Clicked white original' + location);
+        map.panTo(location);
+        var antipodelat = location.lat() * -1;
+        var antipodelng = location.lng() + 180;
+
+        var antipodelocation = new google.maps.LatLng(antipodelat, antipodelng);
+        console.log(antipodelocation.lat(), antipodelocation.lng());
+        map.panTo(antipodelocation);
+        var antinorth = new google.maps.Marker({position: {lat: antipodelocation.lat() + 5, lng: antipodelocation.lng()}, map: map});
+        var antieast = new google.maps.Marker({position: {lat: antipodelocation.lat(), lng: antipodelocation.lng() + 5}, map: map});
+        var antisouth = new google.maps.Marker({position: {lat: antipodelocation.lat() - 5, lng: antipodelocation.lng()}, map: map});
+        var antiwest = new google.maps.Marker({position: {lat: antipodelocation.lat(), lng: antipodelocation.lng() - 5}, map: map});
+        map.setZoom(4);
+
+        var antifill = new google.maps.Polygon({
+            paths: [new google.maps.LatLng(antinorth.position), new google.maps.LatLng(antieast.position), new google.maps.LatLng(antisouth.position), new google.maps.LatLng(antiwest.position)],
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.9,
+            strokeWeight: 2,
+            fillOpacity: 0.1
+        });
+        antifill.setMap(map);
+        google.maps.event.addListener(antifill, 'mouseover', function () {console.log('Fill area hover');this.setOptions({strokeOpacity:1});});
+        google.maps.event.addListener(antifill, 'mouseout', function () {console.log('Fill area hover');this.setOptions({strokeOpacity:0});});
+    }
 }
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
