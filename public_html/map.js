@@ -34,12 +34,14 @@ function initialize() {
     // Other codes to run after the map load
     greenMArkerInfoWindow();
     //getMessageLocation();
-    circleMarker();
-    doughnutMarker();
+    //circleMarker();
+    // doughnutMarker();
     //streetView(); // London now
     //question1();
+    question2();
 }
 ;
+
 
 
 function circleMarker() {
@@ -53,8 +55,11 @@ function circleMarker() {
         center: latlng,
         radius: 50000
     });
-
 }
+
+
+
+
 
 function doughnutMarker() {
     var marker = new google.maps.Marker({
@@ -132,7 +137,7 @@ function africa() {
 }
 //Loacation pan to and marker
 var randomCount = 1;
-function random() { 
+function random() {
     var randomLocation = getRandomLocation();
     map.panTo(randomLocation);
     // map.setZoom(3);
@@ -298,7 +303,7 @@ function setCoordinate() { // Prompt function to choose coordinate
     document.getElementById('coordbutton').innerHTML = 'Change coordinate | ' + lon + ',' + lat;
 }
 
-function getRandomLocation(){
+function getRandomLocation() {
     var latitude = (Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
     var longitude = (Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
     var randomLocation = new google.maps.LatLng(latitude, longitude);
@@ -311,8 +316,8 @@ function random100() {
     var local = new google.maps.LatLng(-34.397, 150.644);
     for (var i = 0; i < 1000; i++) {
 
-        var latitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // -90 to 90
-        var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // -180 to 90
+        var latitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // random number from 2 to -2
+        var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2;
 
 
         var circleRadius = 2; // Max radius
@@ -339,50 +344,52 @@ function random100() {
 function question1() {
     map.setZoom(4);
     var firstPosition = getRandomLocation();
-   // var action = google.maps.event.addListener(map, 'click', function (e) {
-        
-        //var firstPosition = e.latLng;
-        map.panTo(firstPosition);
-        var marker = new google.maps.Marker({
-            position: firstPosition,
-            map: map,
-            icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
-        });
-        // console.log(e.latLng.lat());
-        //console.log(e.latLng.lat() + 1);
-        var north = new google.maps.Marker({
-            position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()},
-            map: map});
-        var east = new google.maps.Marker({
-            position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33},
-            map: map});
-        var south = new google.maps.Marker({
-            position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()},
-            map: map});
-        var west = new google.maps.Marker({
-            position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33},
-            map: map});
+    // var action = google.maps.event.addListener(map, 'click', function (e) {
+    //var firstPosition = e.latLng;
+    map.panTo(firstPosition);
+    var marker = new google.maps.Marker({
+        position: firstPosition,
+        map: map,
+        icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
+    });
+    google.maps.event.addListener(marker, 'click', function () {
+        antipode(marker.position);
+    });
+    // console.log(e.latLng.lat());
+    //console.log(e.latLng.lat() + 1);
+    var north = new google.maps.Marker({
+        position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()},
+        map: map});
+    var east = new google.maps.Marker({
+        position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33},
+        map: map});
+    var south = new google.maps.Marker({
+        position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()},
+        map: map});
+    var west = new google.maps.Marker({
+        position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33},
+        map: map});
 
-        middleAction(north);
-        middleAction(east);
-        middleAction(south);
-        middleAction(west);
-        function middleAction(uniqueMarker) {
-            google.maps.event.addListener(uniqueMarker, 'click', function (e) {
-                console.log("Map location");
-                map.panTo(uniqueMarker.position);
-                var middleMarker = new google.maps.Marker({
-                    position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
-                    map: map,
-                    icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
-                map.panTo(middleMarker.position);
-                map.setZoom(6);
-                google.maps.event.addListener(middleMarker, 'click', function () {
-                    antipode(middleMarker.position);
-                });
+    middleAction(north);
+    middleAction(east);
+    middleAction(south);
+    middleAction(west);
+    function middleAction(uniqueMarker) {
+        google.maps.event.addListener(uniqueMarker, 'click', function (e) {
+            console.log("Map location");
+            map.panTo(uniqueMarker.position);
+            var middleMarker = new google.maps.Marker({
+                position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
+                map: map,
+                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
+            map.panTo(middleMarker.position);
+            map.setZoom(6);
+            google.maps.event.addListener(middleMarker, 'click', function () {
+                antipode(middleMarker.position);
             });
-        }
-   // });
+        });
+    }
+    // });
     function antipode(location) {
         console.log('Clicked white original' + location);
         map.panTo(location);
@@ -417,8 +424,70 @@ function question1() {
                 this.setOptions({strokeOpacity: 0});
             });
         });
-
     }
+}
+
+function question2() {
+    google.maps.event.addListenerOnce(map, 'click', function (e) {
+        console.log(e.latLng);
+        var q2marker = new google.maps.Marker({
+            position: e.latLng, //new google.maps.LatLng(-34, 150), //choosen position from the user
+            map: map
+        });
+        map.panTo(q2marker.position);
+        google.maps.event.addListenerOnce(q2marker, 'click', function () {
+            var angle = Math.random() * 360;
+            var radius = 10 / 3;
+            var x = radius * Math.sin(Math.PI * 2 * angle / 360);
+            var y = radius * Math.cos(Math.PI * 2 * angle / 360);
+            map.setZoom(5);
+
+            rmarker = new google.maps.Marker({
+                position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
+                map: map
+            });
+
+            var circle = new google.maps.Circle({
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.25,
+                map,
+                radius: 111.045 * 1000 * radius / 2
+            });
+
+            setTimeout(() => {
+                var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
+                circle.setOptions({center: middlePoint});
+                google.maps.event.addDomListener(circle, 'click', () => {
+                    console.log('circle');
+                    for (var i = 0; i <= 10; i++) {
+                        var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        console.log(color);
+                        var angle = Math.random() * 360;
+                        var radius = 10 / 6;
+                        var location = {lat: middlePoint.lat() + Math.cos(angle) * radius, lng: middlePoint.lng() + Math.sin(angle) * radius};
+                        new google.maps.Circle({
+                            strokeColor: color,
+                            strokeOpacity: 9,
+                            strokeWeight: 2,
+                            fillColor: color,
+                            fillOpacity: 0.8,
+                            map,
+                            radius: 10000,
+                            center: location
+                        });
+
+                    }
+                });
+            }, 100);
+
+
+        });
+
+    });
+
 }
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
