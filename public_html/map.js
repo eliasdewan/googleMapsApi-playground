@@ -38,7 +38,8 @@ function initialize() {
     // doughnutMarker();
     //streetView(); // London now
     //question1();
-    question2();
+    //question2();
+    button4();
 }
 ;
 
@@ -447,16 +448,17 @@ function question2() {
                 position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
                 map: map
             });
-            
+
             var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
             var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
-            circle.setOptions({strokeColor: "#FF0000",
+            circle.setOptions({
+                strokeColor: "#FF0000",
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
                 fillColor: "#FF0000",
                 fillOpacity: 0.25,
-                map, 
-                center: middlePoint, 
+                map,
+                center: middlePoint,
                 radius: distance / 2});
             map.panTo(circle.getCenter());
 
@@ -480,7 +482,54 @@ function question2() {
             });
         });
     });
+}
+//69 miles (111 kilometers)
+function button4() {
+    console.log('button 4');
+    google.maps.event.addListenerOnce(map, 'click', (location) => {
+        map.panTo(location.latLng);
+        map.setZoom(6.5);
+        console.log('button 4 inside click');
+        var square = new google.maps.Rectangle({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            map,
+            bounds: {
+                north: location.latLng.lat() + 300 / 111,
+                south: location.latLng.lat() - 300 / 111,
+                east: location.latLng.lng() + 300 / 111,
+                west: location.latLng.lng() - 300 / 111
+            }
+        });
+        console.log(square.getBounds().getNorthEast());
 
+        squareMarkers(square.getBounds().getNorthEast());
+        squareMarkers({lat: square.getBounds().getNorthEast().lat(), lng: square.getBounds().getSouthWest().lng()});
+        squareMarkers({lat: square.getBounds().getSouthWest().lat(), lng: square.getBounds().getNorthEast().lng()});
+        squareMarkers(square.getBounds().getSouthWest());
+        
+        
+       // new google.maps.PlusCode.Builder.getGlobalCode(square.getBounds().getNorthEast());
+        new google.maps.places.PlacePlusCode.getGlobalCode(square.getBounds().getNorthEast());
+        
+        
+        function squareMarkers(location) {
+
+            var smarker = new google.maps.Marker({
+                position: location,
+                map,
+                title: "Square marker "}
+            );
+            var InfoWindow = new google.maps.InfoWindow({content: 'This is my green marker!'});
+            google.maps.event.addListener(smarker, 'click', function () {
+                InfoWindow.open(map, this);
+            });
+        }
+
+    });
 }
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
