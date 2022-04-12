@@ -507,28 +507,32 @@ function button4() {
         console.log(square.getBounds().getNorthEast());
 
         squareMarkers(square.getBounds().getNorthEast());
-        squareMarkers({lat: square.getBounds().getNorthEast().lat(), lng: square.getBounds().getSouthWest().lng()});
-        squareMarkers({lat: square.getBounds().getSouthWest().lat(), lng: square.getBounds().getNorthEast().lng()});
+        squareMarkers(new google.maps.LatLng(square.getBounds().getNorthEast().lat(), square.getBounds().getSouthWest().lng()));
+        squareMarkers(new google.maps.LatLng(square.getBounds().getSouthWest().lat(), square.getBounds().getNorthEast().lng()));
         squareMarkers(square.getBounds().getSouthWest());
-        
-        
-       // new google.maps.PlusCode.Builder.getGlobalCode(square.getBounds().getNorthEast());
-        new google.maps.places.PlacePlusCode.getGlobalCode(square.getBounds().getNorthEast());
-        
-        
-        function squareMarkers(location) {
 
+
+        // new google.maps.PlusCode.Builder.getGlobalCode(square.getBounds().getNorthEast());
+        //new google.maps.places.PlacePlusCode.getGlobalCode(square.getBounds().getNorthEast());
+
+        function squareMarkers(location) {
+            var Http = new XMLHttpRequest();
+            var plus = 'https://plus.codes/api?address=' + location.lat() + ',' + location.lng();
+            Http.open("GET", plus, false);
+            Http.send();
+            var webreturn = JSON.parse(Http.responseText);
+           // console.log((webreturn.plus_code.global_code));
+        
             var smarker = new google.maps.Marker({
                 position: location,
                 map,
                 title: "Square marker "}
             );
-            var InfoWindow = new google.maps.InfoWindow({content: 'This is my green marker!'});
+            var InfoWindow = new google.maps.InfoWindow({content: webreturn.plus_code.global_code});
             google.maps.event.addListener(smarker, 'click', function () {
                 InfoWindow.open(map, this);
             });
         }
-
     });
 }
 // -- dom actuib listeber
