@@ -428,6 +428,7 @@ function question1() {
 }
 
 function question2() {
+    var circle = new google.maps.Circle();
     google.maps.event.addListenerOnce(map, 'click', function (e) {
         console.log(e.latLng);
         var q2marker = new google.maps.Marker({
@@ -440,45 +441,43 @@ function question2() {
             var radius = 10 / 3;
             var x = radius * Math.sin(Math.PI * 2 * angle / 360);
             var y = radius * Math.cos(Math.PI * 2 * angle / 360);
-            map.setZoom(5);
+            map.setZoom(7);
 
             rmarker = new google.maps.Marker({
                 position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
                 map: map
             });
-            var circle = new google.maps.Circle({
-                strokeColor: "#FF0000",
+            
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
+            var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
+            circle.setOptions({strokeColor: "#FF0000",
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
                 fillColor: "#FF0000",
                 fillOpacity: 0.25,
-                map
-            });
+                map, 
+                center: middlePoint, 
+                radius: distance / 2});
+            map.panTo(circle.getCenter());
 
-            setTimeout(() => {
-                var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
-                var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
-                circle.setOptions({center: middlePoint, radius: distance/2});
-                
-                google.maps.event.addDomListener(circle, 'click', () => {
-                    for (var i = 0; i <= 10; i++) {
-                        var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                        //console.log(color);
-                        var angle = Math.random() * 360;  
-                        var location = google.maps.geometry.spherical.computeOffset(circle.getCenter(),circle.getRadius(),angle);                        
-                        new google.maps.Circle({
-                            strokeColor: color,
-                            strokeOpacity: 9,
-                            strokeWeight: 2,
-                            fillColor: color,
-                            fillOpacity: 0.8,
-                            map,
-                            radius: 10000,
-                            center: location
-                        });
-                    }
-                });
-            }, 100);
+            google.maps.event.addDomListener(circle, 'click', () => {
+                for (var i = 0; i <= 10; i++) {
+                    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                    //console.log(color);
+                    // var angle = Math.random() * 360;  
+                    // var location = google.maps.geometry.spherical.computeOffset(circle.getCenter(),circle.getRadius(),angle);                        
+                    new google.maps.Circle({
+                        strokeColor: color,
+                        strokeOpacity: 9,
+                        strokeWeight: 2,
+                        fillColor: color,
+                        fillOpacity: 0.8,
+                        map,
+                        radius: 10000,
+                        center: google.maps.geometry.spherical.computeOffset(circle.getCenter(), circle.getRadius(), Math.random() * 360)
+                    });
+                }
+            });
         });
     });
 
