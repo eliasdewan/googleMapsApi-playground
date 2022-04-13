@@ -549,43 +549,48 @@ function button5() {
         fillOpacity: 0.35
     });
     var points = [];
+    var density = new google.maps.visualization.HeatmapLayer();
     var boundsofPolygon = new google.maps.LatLngBounds();
     var addPointAction = google.maps.event.addListener(map, 'click', (clicklocation) => {
         points.push(clicklocation.latLng.toJSON());
         area.setOptions({paths: points});
         boundsofPolygon.extend(clicklocation.latLng);
-        //console.log(boundsofPolygon.getNorthEast().lat());
-        //console.log(boundsofPolygon.getSouthWest().lat());
-        //console.log(boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat());
         var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
         var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
         if (areaLng < 0) {
-             areaLng += 360 ;
+            areaLng += 360;
         }
-
 
         console.log(areaLng + ' and ' + areaLat);
         if (points.length >= 4) {
             google.maps.event.removeListener(addPointAction);
-            google.maps.event.addListener(area, 'mouseover', () => {
+            var heatmapData = [];
+            var hundredMarkers = [];
 
+            google.maps.event.addListener(area, 'mouseover', () => {
+                density.setMap(null);
+                heatmapData = [];
+                area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"});
                 for (var i = 0; i <= 100; ) {
-                   // var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * 4) - 2, lng: boundsofPolygon.getCenter().lng() + (Math.random() * 4) - 2};
                     var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * areaLng * 2) - areaLng, lng: boundsofPolygon.getCenter().lng() + (Math.random() * areaLat * 2) - areaLat};
                     if (google.maps.geometry.poly.containsLocation(currentPosition, area)) {
-
-                        new google.maps.Marker({
+                        var singleMarker = new google.maps.Marker({
                             position: currentPosition,
                             map: map
                         });
+                        hundredMarkers.push(singleMarker);
+                        heatmapData.push(singleMarker.position);
                         i++;
                     }
                 }
-
-                area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"}
-                );
                 google.maps.event.addListener(area, 'mouseout', () => {
+                    for (i = 0; i < hundredMarkers.length; i++) {
+                        hundredMarkers[i].setMap(null);
+                    }
                     area.setOptions({strokeColor: "#00ff00", fillColor: "#FF0000"});
+                    // var density = new google.maps.visualization.HeatmapLayer();
+                    density.setOptions({data: heatmapData});
+                    density.setMap(map);
                 });
             });
         }
