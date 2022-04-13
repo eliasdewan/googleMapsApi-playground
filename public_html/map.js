@@ -540,19 +540,54 @@ function button4() {
 
 function button5() {
     console.log('button 5');
+    google.maps.event.clearListeners(map, 'click');
     var area = new google.maps.Polygon({
-        strokeColor: "#FF0000",
+        strokeColor: "#00ff00",
         strokeOpacity: 0.8,
-        strokeWeight: 2,
+        strokeWeight: 5,
         fillColor: "#FF0000",
         fillOpacity: 0.35
     });
     var points = [];
+    var boundsofPolygon = new google.maps.LatLngBounds();
     var addPointAction = google.maps.event.addListener(map, 'click', (clicklocation) => {
         points.push(clicklocation.latLng.toJSON());
         area.setOptions({paths: points});
+        boundsofPolygon.extend(clicklocation.latLng);
+        //console.log(boundsofPolygon.getNorthEast().lat());
+        //console.log(boundsofPolygon.getSouthWest().lat());
+        //console.log(boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat());
+        var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
+        var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
+        if (areaLng < 0) {
+             areaLng += 360 ;
+        }
+
+
+        console.log(areaLng + ' and ' + areaLat);
         if (points.length >= 4) {
             google.maps.event.removeListener(addPointAction);
+            google.maps.event.addListener(area, 'mouseover', () => {
+
+                for (var i = 0; i <= 100; ) {
+                   // var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * 4) - 2, lng: boundsofPolygon.getCenter().lng() + (Math.random() * 4) - 2};
+                    var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * areaLng * 2) - areaLng, lng: boundsofPolygon.getCenter().lng() + (Math.random() * areaLat * 2) - areaLat};
+                    if (google.maps.geometry.poly.containsLocation(currentPosition, area)) {
+
+                        new google.maps.Marker({
+                            position: currentPosition,
+                            map: map
+                        });
+                        i++;
+                    }
+                }
+
+                area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"}
+                );
+                google.maps.event.addListener(area, 'mouseout', () => {
+                    area.setOptions({strokeColor: "#00ff00", fillColor: "#FF0000"});
+                });
+            });
         }
     });
     area.setMap(map);
