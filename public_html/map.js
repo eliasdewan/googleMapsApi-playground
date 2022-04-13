@@ -39,7 +39,8 @@ function initialize() {
     //streetView(); // London now
     //question1();
     //question2();
-    button4();
+    // button4();
+    button5();
 }
 ;
 
@@ -521,8 +522,8 @@ function button4() {
             Http.open("GET", plus, false);
             Http.send();
             var webreturn = JSON.parse(Http.responseText);
-           // console.log((webreturn.plus_code.global_code));
-        
+            // console.log((webreturn.plus_code.global_code));
+
             var smarker = new google.maps.Marker({
                 position: location,
                 map,
@@ -534,6 +535,27 @@ function button4() {
             });
         }
     });
+}
+
+
+function button5() {
+    console.log('button 5');
+    var area = new google.maps.Polygon({
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35
+    });
+    var points = [];
+    var addPointAction = google.maps.event.addListener(map, 'click', (clicklocation) => {
+        points.push(clicklocation.latLng.toJSON());
+        area.setOptions({paths: points});
+        if (points.length >= 4) {
+            google.maps.event.removeListener(addPointAction);
+        }
+    });
+    area.setMap(map);
 }
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
