@@ -40,7 +40,7 @@ function initialize() {
     //question1();
     //question2();
     // button4();
-    button5();
+    //button5();
 }
 ;
 
@@ -597,9 +597,21 @@ function button5() {
     });
     area.setMap(map);
 }
+
+function button6() {
+    var weatherLayer = new google.maps.ImageMapType({
+        getTileUrl:function () {var index=0;index++;return "https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid=0af3058a2bca33028fae5ed6dd50664c";},
+        tileSize: new google.maps.Size(256, 256)//,
+                //maxZoom:20
+    });
+    map.overlayMapTypes.push(weatherLayer);
+}
+    var some="https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid=0af3058a2bca33028fae5ed6dd50664c";
+function button7() {}
+
+
+
 // -- dom actuib listeber
 google.maps.event.addDomListener(window, 'load', initialize);
-
-
 
 
