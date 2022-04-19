@@ -599,23 +599,19 @@ function button5() {
 }
 
 function button6() {
-    map.setZoom(1);
-    var currentzoom = map.getZoom();
-    // var layerUrl = ["https://tile.openweathermap.org/map/precipitation_new/",currentzoom,"/0/0.png?appid=0af3058a2bca33028fae5ed6dd50664c"].join('');
-    //var layerUrl = "https://tile.openweathermap.org/map/precipitation_new/1/0/0.png?appid=0af3058a2bca33028fae5ed6dd50664c";
-    var layerUrl = "fullGoogleMaps.png";
-    var weatherLayer = new google.maps.ImageMapType({
-        maxZoom: 18, 
-        tileSize: new google.maps.Size(256, 256),
-       // opacity:0.9,
-        getTileUrl: function (coord, zoom) {
-            console.log(zoom+" "+coord+" "+coord.x+" "+coord.y);
-            return 'https://tile.openweathermap.org/map/clouds_new/' + zoom + '/' + coord.x + '/' + coord.y + '.png?appid=0af3058a2bca33028fae5ed6dd50664c';
-        }
-    });
-    map.overlayMapTypes.push(weatherLayer);
+    if (map.overlayMapTypes.getLength() >= 1) {
+        map.overlayMapTypes.clear();
+    } else {
+        var weatherLayer = new google.maps.ImageMapType({
+            maxZoom: 18,
+            tileSize: new google.maps.Size(256, 256),
+            getTileUrl: function (coord, zoom) {
+                return 'https://tile.openweathermap.org/map/clouds_new/' + zoom + '/' + coord.x + '/' + coord.y + '.png?appid=0af3058a2bca33028fae5ed6dd50664c';
+            }
+        });
+        map.overlayMapTypes.push(weatherLayer);
+    }
 }
-//var some = "https://tile.openweathermap.org/map/clouds_new/0/0/0.png?appid=0af3058a2bca33028fae5ed6dd50664c";
 function button7() {}
 
 
