@@ -41,6 +41,7 @@ function initialize() {
     //question2();
     // button4();
     //button5();
+    button7();
 }
 ;
 
@@ -612,7 +613,61 @@ function button6() {
         map.overlayMapTypes.push(weatherLayer);
     }
 }
-function button7() {}
+function button7() {
+    map.panTo({lat: 51.51, lng: -0.17});
+    map.setZoom(15);
+    var directionsService = new google.maps.DirectionsService();
+    //var directionsRenderer = new google.maps.DirectionsRenderer({map:map,directions:direction});// directions to have
+    var locations = [];
+    var request;
+
+    new google.maps.event.addListener(map, 'click', (clickPoint) => {
+        locations.push(clickPoint.latLng);
+        new google.maps.Marker({position: clickPoint.latLng, map: map});
+        var infoWindow = new google.maps.InfoWindow({content: 'This is my green marker!', position: clickPoint.latLng});
+        infoWindow.open(map);
+        console.log(clickPoint.latLng);
+        console.log(clickPoint.latLng.toJSON());
+
+        if (locations.length >= 2) {
+            google.maps.event.clearListeners(map, 'click');
+            request = {origin: locations[0], destination: locations[1], travelMode: 'DRIVING', provideRouteAlternatives: true};
+
+            directionsService.route(request, function (result, status) {
+                if (status === 'OK') {
+                    console.log('passed ok state');
+                    console.log(result.routes);
+                    console.log(result.routes.length);
+
+
+                    for (var i = 0; result.routes.length > i; i++) {
+                        console.log('in loop');
+                        console.log('Printing leg now');
+                        console.log(result.routes[i].legs[0].steps);
+                        console.log(result.routes[i].legs[0].steps[0].instructions);
+                        console.log(result.routes[i].legs[0].steps[0].start_location.toJSON());
+                        console.log(result.routes[i].legs[0].steps[0].start_point.toJSON());
+                        console.log(result.routes[i].legs[0].steps[0].end_location.toJSON());//same
+                        console.log(result.routes[i].legs[0].steps[0].end_point.toJSON());
+                        console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
+                        console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
+                        new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
+                    }
+                    //directionsRenderer.setDirections(result);
+                    //new google.maps.DirectionsRenderer({map: map, directions: result});
+
+
+                    // directionsroute interface->legs contains direction leg array - the leg has array steps directionsteps wich can have sub steps
+                }
+            });
+        }
+        ;
+
+    });
+
+
+
+}
 
 
 
