@@ -38,10 +38,10 @@ function initialize() {
     // doughnutMarker();
     //streetView(); // London now
     //question1();
-    //question2();
-    // button4();
+    //button3();
+    //button4();
     //button5();
-    button7();
+    //button7();
 }
 ;
 
@@ -430,7 +430,7 @@ function question1() {
     }
 }
 
-function question2() {
+function button3() {
     var circle = new google.maps.Circle();
     google.maps.event.addListenerOnce(map, 'click', function (e) {
         console.log(e.latLng);
@@ -439,50 +439,50 @@ function question2() {
             map: map
         });
         map.panTo(q2marker.position);
-        google.maps.event.addListenerOnce(q2marker, 'click', function () {
-            var angle = Math.random() * 360;
-            var radius = 10 / 3;
-            var x = radius * Math.sin(Math.PI * 2 * angle / 360);
-            var y = radius * Math.cos(Math.PI * 2 * angle / 360);
-            map.setZoom(7);
+        //    google.maps.event.addListenerOnce(q2marker, 'click', function () {
+        var angle = Math.random() * 360;
+        var radius = 10 / 3;
+        var x = radius * Math.sin(Math.PI * 2 * angle / 360);
+        var y = radius * Math.cos(Math.PI * 2 * angle / 360);
+        map.setZoom(7);
 
-            rmarker = new google.maps.Marker({
-                position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
-                map: map
-            });
-
-            var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
-            var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
-            circle.setOptions({
-                strokeColor: "#FF0000",
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: "#FF0000",
-                fillOpacity: 0.25,
-                map,
-                center: middlePoint,
-                radius: distance / 2});
-            map.panTo(circle.getCenter());
-
-            google.maps.event.addDomListener(circle, 'click', () => {
-                for (var i = 0; i <= 10; i++) {
-                    var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                    //console.log(color);
-                    // var angle = Math.random() * 360;  
-                    // var location = google.maps.geometry.spherical.computeOffset(circle.getCenter(),circle.getRadius(),angle);                        
-                    new google.maps.Circle({
-                        strokeColor: color,
-                        strokeOpacity: 9,
-                        strokeWeight: 2,
-                        fillColor: color,
-                        fillOpacity: 0.8,
-                        map,
-                        radius: 10000,
-                        center: google.maps.geometry.spherical.computeOffset(circle.getCenter(), circle.getRadius(), Math.random() * 360)
-                    });
-                }
-            });
+        rmarker = new google.maps.Marker({
+            position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
+            map: map
         });
+
+        var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
+        var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
+        circle.setOptions({
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.25,
+            map,
+            center: middlePoint,
+            radius: distance / 2});
+        map.panTo(circle.getCenter());
+
+        google.maps.event.addDomListener(circle, 'click', () => {
+            for (var i = 0; i <= 10; i++) {
+                var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                //console.log(color);
+                // var angle = Math.random() * 360;  
+                // var location = google.maps.geometry.spherical.computeOffset(circle.getCenter(),circle.getRadius(),angle);                        
+                new google.maps.Circle({
+                    strokeColor: color,
+                    strokeOpacity: 9,
+                    strokeWeight: 2,
+                    fillColor: color,
+                    fillOpacity: 0.8,
+                    map,
+                    radius: 10000,
+                    center: google.maps.geometry.spherical.computeOffset(circle.getCenter(), circle.getRadius(), Math.random() * 360)
+                });
+            }
+        });
+        //   });
     });
 }
 //69 miles (111 kilometers)
@@ -624,7 +624,7 @@ function button7() {
     new google.maps.event.addListener(map, 'click', (clickPoint) => {
         locations.push(clickPoint.latLng);
         new google.maps.Marker({position: clickPoint.latLng, map: map});
-        var infoWindow = new google.maps.InfoWindow({content: 'This is my green marker!', position: clickPoint.latLng});
+        var infoWindow = new google.maps.InfoWindow({content: 'Start - finish!', position: clickPoint.latLng});
         infoWindow.open(map);
         console.log(clickPoint.latLng);
         console.log(clickPoint.latLng.toJSON());
@@ -652,6 +652,11 @@ function button7() {
                         console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
                         console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
                         new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
+                        for (var ii = 0; result.routes[i].legs[0].steps.length > ii; ii++) {
+                            var infoWindow = new google.maps.InfoWindow({content: result.routes[i].legs[0].steps[ii].instructions, position: result.routes[i].legs[0].steps[ii].start_location});
+                            infoWindow.open(map);
+
+                        }
                     }
                     //directionsRenderer.setDirections(result);
                     //new google.maps.DirectionsRenderer({map: map, directions: result});
