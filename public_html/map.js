@@ -41,7 +41,7 @@ function initialize() {
     //button3();
     //button4();
     //button5();
-    //button7();
+    button7();
 }
 ;
 
@@ -249,30 +249,8 @@ function rectangle() {
 //Math.PI * 2 * angle/360
 //x = Math.cos(Math.PI * 2 * angle/360); and y = Math.sin(Math.PI * 2 * angle/360);
 
-function processSVData(data, status) {
-
-    if (status === 'OK')
-    {
-
-
-        panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv'));
-
-
-        panorama.setPosition(data.location.latLng);
-        panorama.setPov(({
-            heading: 265,
-            pitch: 0
-        }));
-
-        panorama.setVisible(true);
-
-    } else
-        alert('Street View data not found for this location.');
-
-}
 
 function streetView() {
-
     //var london = new google.maps.LatLng(51.51, -0.17);
     var london = {lat: 51.51, lng: -0.17};
     map.panTo(london);
@@ -288,13 +266,20 @@ function streetView() {
         content: '<div id="ndiv" style="width:200px;height:200px;"></div>'
     });
 
-    //marker.addListener('click',
+
     marker.addListener('mouseup',
             function () {
-                var markerLocation = {lat: marker.getPosition().lat(), lng: marker.getPosition().lng()};
+                var markerLocation = marker.position;//{lat: marker.getPosition().lat(), lng: marker.getPosition().lng()};
                 infowindow.open(map, marker);
                 var sv = new google.maps.StreetViewService();
-                sv.getPanorama({location: markerLocation, radius: 50}, processSVData);
+                sv.getPanorama({location: markerLocation, radius: 50}, function (data, status) { // search radius
+                    if (status === 'OK')
+                    {
+                        panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv'), {position: data.location.latLng});
+                    } else {
+                        alert('Street View data not found for this location.');
+                    }
+                });
             });
 }
 
@@ -617,15 +602,28 @@ function button7() {
     map.panTo({lat: 51.51, lng: -0.17});
     map.setZoom(15);
     var directionsService = new google.maps.DirectionsService();
-    //var directionsRenderer = new google.maps.DirectionsRenderer({map:map,directions:direction});// directions to have
     var locations = [];
     var request;
 
     new google.maps.event.addListener(map, 'click', (clickPoint) => {
         locations.push(clickPoint.latLng);
-        new google.maps.Marker({position: clickPoint.latLng, map: map});
-        var infoWindow = new google.maps.InfoWindow({content: 'Start - finish!', position: clickPoint.latLng});
-        infoWindow.open(map);
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({location: clickPoint.latLng}, function (results, status) {
+            if (status === 'OK') {
+
+                console.log(results[0].formatted_address);
+                console.log(results[0]);
+                console.log(results[0].plus_code);
+                var infoWindow = new google.maps.InfoWindow({content: results[0].formatted_address, position: clickPoint.latLng});
+                infoWindow.open(map);
+            } else {
+                console.log('Geocode was not successful for the following reason: ' + status);
+                var infoWindow = new google.maps.InfoWindow({content: 'no address found', position: clickPoint.latLng});
+                infoWindow.open(map);
+            }
+        });
+
+        //new google.maps.Marker({position: clickPoint.latLng, map: map});
         console.log(clickPoint.latLng);
         console.log(clickPoint.latLng.toJSON());
 
@@ -639,7 +637,7 @@ function button7() {
                     console.log(result.routes);
                     console.log(result.routes.length);
 
-
+                    var openWindow = [];
                     for (var i = 0; result.routes.length > i; i++) {
                         console.log('in loop');
                         console.log('Printing leg now');
@@ -651,11 +649,35 @@ function button7() {
                         console.log(result.routes[i].legs[0].steps[0].end_point.toJSON());
                         console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
                         console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
+
                         new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
                         for (var ii = 0; result.routes[i].legs[0].steps.length > ii; ii++) {
-                            var infoWindow = new google.maps.InfoWindow({content: result.routes[i].legs[0].steps[ii].instructions, position: result.routes[i].legs[0].steps[ii].start_location});
-                            infoWindow.open(map);
-
+                            (function () {
+                                var marker = new google.maps.Marker({map: map, position: result.routes[i].legs[0].steps[ii].start_location, animation: google.maps.Animation.DROP});
+                                google.maps.event.addListener(marker, 'click',
+                                        function () {
+                                            if (openWindow.length > 0) {
+                                                console.log(openWindow);
+                                                openWindow[0].close();
+                                                openWindow.pop();
+                                            }
+                                            var infowindow = new google.maps.InfoWindow({
+                                                content: '<div id="ndiv' + ii + '" style="width:300px;height:300px;"></div>'
+                                            });
+                                            infowindow.open(map, marker);
+                                            openWindow.push(infowindow);
+                                            //google.maps.event.addListener('click', () => {infowindow.close();});
+                                            var sv = new google.maps.StreetViewService();
+                                            sv.getPanorama({location: marker.position, radius: 50}, function (data, status) { // search radius
+                                                if (status === 'OK')
+                                                {
+                                                    panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv' + ii), {position: data.location.latLng});
+                                                } else {
+                                                    alert('Street View data not found for this location.');
+                                                }
+                                            });
+                                        });
+                            })();
                         }
                     }
                     //directionsRenderer.setDirections(result);
