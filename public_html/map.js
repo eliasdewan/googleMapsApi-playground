@@ -32,7 +32,7 @@ function initialize() {
     map = new google.maps.Map(mapDiv, mapOptions);
 
     // Other codes to run after the map load
-    greenMArkerInfoWindow();
+    //greenMArkerInfoWindow();
     //getMessageLocation();
     //circleMarker();
     // doughnutMarker();
@@ -41,7 +41,7 @@ function initialize() {
     //button3();
     //button4();
     //button5();
-    button7();
+   // button7();
 }
 ;
 
@@ -449,7 +449,7 @@ function button3() {
             radius: distance / 2});
         map.panTo(circle.getCenter());
 
-        google.maps.event.addDomListener(circle, 'click', () => {
+        google.maps.event.addListener(circle, 'click', () => {
             for (var i = 0; i <= 10; i++) {
                 var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
                 //console.log(color);
@@ -699,6 +699,7 @@ function button7() {
 
 
 // -- dom actuib listeber
-google.maps.event.addDomListener(window, 'load', initialize);
+//google.maps.event.addDomListener(window, 'load', initialize);
+window.addEventListener('load',initialize);
 
 
