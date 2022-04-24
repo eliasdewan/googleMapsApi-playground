@@ -41,7 +41,7 @@ function initialize() {
     //button3();
     //button4();
     //button5();
-   // button7();
+    // button7();
 }
 ;
 
@@ -60,31 +60,15 @@ function circleMarker() {
     });
 }
 
-
-
-
-
 function doughnutMarker() {
     var marker = new google.maps.Marker({
-        position: {lat: -34.4, lng: 150.6},
-        map: map,
-        title: 'I am here',
-        icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 15
-        }
-    });
+        position: {lat: -34.4, lng: 150.6}, map: map, title: 'I am here', icon: {path: google.maps.SymbolPath.CIRCLE, scale: 15}});
 }
 
 
 function greenMArkerInfoWindow() {
-    var markerGreen = new google.maps.Marker({
-        position: {lat: -34.5, lng: 150.5},
-        map: map,
-        title: 'I am here Green',
-        icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-                //can be pink, yellow or purple
-    });
+    var markerGreen = new google.maps.Marker({position: {lat: -34.5, lng: 150.5}, map: map, title: 'I am here Green', icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'});
+    //can be pink, yellow or purple
     var InfoWindow = new google.maps.InfoWindow({content: 'This is my green marker!'});
     // we can use full html divs and set their class and customise in html style tags,(the class)
     google.maps.event.addListener(markerGreen, 'click', function () {
@@ -95,43 +79,21 @@ function greenMArkerInfoWindow() {
 
 function getMessageLocation() {
     // -- COPIED CODE FROM HERE
-    let infoWindow = new google.maps.InfoWindow({
-        content: "Click the map to get Lat/Lng!",
-        position: latlng
-    });
-
+    let infoWindow = new google.maps.InfoWindow({content: "Click the map to get Lat/Lng!", position: latlng});
     infoWindow.open(map);
-
-    // Configure the click listener.
-    map.addListener("click", (mapsMouseEvent) => {
-        // Close the current InfoWindow.
-        infoWindow.close();
-
-        // Create a new InfoWindow.
-        infoWindow = new google.maps.InfoWindow({
-            position: mapsMouseEvent.latLng
-        });
-        infoWindow.setContent(
-                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
-                );
+    map.addListener("click", (mapsMouseEvent) => {// Configure the click listener.
+        infoWindow.close();// Close the current InfoWindow.
+        infoWindow = new google.maps.InfoWindow({position: mapsMouseEvent.latLng});// Create a new InfoWindow.
+        infoWindow.setContent(JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2));
         infoWindow.open(map);
     });
 }
-
-
-
-
 // -- action and buttons code -- //
 function london()
 {
-    var mapOptions = {
-        // coordinates for hydepark
-        center: new google.maps.LatLng(51.51, -0.17),
-        zoom: 12,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
+    var mapOptions = {center: new google.maps.LatLng(51.51, -0.17), zoom: 12, mapTypeId: google.maps.MapTypeId.ROADMAP};
+    // coordinates for hydepark
     map = new google.maps.Map(document.getElementById("map"), mapOptions);
-
 }
 
 function africa() {
@@ -143,16 +105,7 @@ var randomCount = 1;
 function random() {
     var randomLocation = getRandomLocation();
     map.panTo(randomLocation);
-    // map.setZoom(3);
-    //alert(latitude+" "+longitude);
-    // adding the marker
-    var randomMarker = new google.maps.Marker({
-        position: randomLocation,
-        map,
-        title: "Randmo marker " + randomCount
-
-    });
-
+    var randomMarker = new google.maps.Marker({position: randomLocation, map, title: "Randmo marker " + randomCount});
     //Message
     var InfoWindow = new google.maps.InfoWindow({content: 'This is random marker n ' + randomCount + ' !'});
     // we can use full html divs and set their class and customise in html style tags,(the class)
@@ -182,20 +135,15 @@ function zoomOut() {
     map.setZoom(map.getZoom() - 1);
 }
 
-function circle() {
-    var lat = -34.397;
-    var lng = 150.644;
+function circle() { // circle of marker place in interval 
+    var lat = -34.397, lng = 150.644; // SETTING THE LAT LNG VALUES where to begin from
     map.panTo({lat: lat, lng: lng});
     map.setZoom(6);
-    var angle = 0;
-    var radius = 1;
-
+    var angle = 0, radius = 2; //SETTING ANGLE AND RADIUS
     var markerInterval = setInterval(function () {
-
-        // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
-        // BETTER METHOD
-        var location = {lat: lat + Math.cos(Math.PI * 2 * angle / 360), lng: lng + Math.sin(Math.PI * 2 * angle / 360)};
-        // var location = {lat: lat + Math.cos(angle) * radius, lng: lng + Math.sin(angle) * radius};
+        //console.log(angle + " " + Math.cos(Math.PI * 2 * angle / 360) * radius + " " + Math.sin(Math.PI * 2 * angle / 360) * radius);
+        // ALTERNATIVE METHOD - in random function this is uniform to angle
+        var location = {lat: lat + Math.cos(Math.PI * 2 * angle / 360) * radius, lng: lng + Math.sin(Math.PI * 2 * angle / 360) * radius};
         new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
         // map.panTo(location);
         angle += 45;
@@ -203,16 +151,15 @@ function circle() {
             clearInterval(markerInterval);
         }
         console.log(angle);
-    }, 1000);
+    }, 500);
 }
 
-function randomMarker() {
-    var orilat = -34.397;
-    var orilng = 150.644;
-    map.panTo({lat: orilat, lng: orilng});
+function randomMarker() {// 
+    var lat = -34.397;
+    var lng = 150.644;
+    map.panTo({lat: lat, lng: lng});
     var angle = 0;
     var radius = 1;
-
     // angle - radius - orginal lat and length - delay and pan to original location
     //alert("workig" + angle);
 
@@ -221,15 +168,33 @@ function randomMarker() {
             clearInterval(markerInterval);
         }
         // console.log(angle + " " + Math.cos(Math.PI * 2 * angle/360) + " "  + Math.sin(Math.PI * 2 * angle/360));
-        // BETTER METHOD
-        //var location = {lat: orilat + Math.cos(Math.PI * 2 * angle/360), lng: orilng + Math.sin(Math.PI * 2 * angle/360)};
-        var location = {lat: orilat + Math.cos(angle) * radius, lng: orilng + Math.sin(angle) * radius};
+        // BETTER METHOD in circle function - this is uniform to angle
+        var location = {lat: lat + Math.cos(angle) * radius, lng: lng + Math.sin(angle) * radius};
         new google.maps.Marker({position: location, map, title: "Randmo marker " + angle});
         angle++;
     }, 5);
 }
 
-function rectangle() {
+function random100() { // 1000 random markers in an area
+    var local = new google.maps.LatLng(-34.397, 150.644); // start position
+    for (var i = 0; i < 1000; i++) {
+        var latitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // random number from 2 to -2
+        var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2;
+        var circleRadius = 2; // Max radius
+        // var circleRadius = Math.sqrt(2 * 2 + 2 * 2); // radius in x y location
+        var currentCircle = Math.sqrt(latitude * latitude + longitude * longitude);
+        console.log(circleRadius);
+        console.log(currentCircle);
+        if (currentCircle < circleRadius) {
+            var reandomPosition = {lat: local.lat() + latitude, lng: local.lng() + longitude};
+            new google.maps.Marker({position: reandomPosition, map: map, title: 'I am here Green', icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'});//can be pink, yellow or purple
+        }
+    }
+}
+
+
+
+function rectangle() { // moves in a rectangular way
 //alert("for showing message");
     var lat = -34.397;
     var lng = 150.644;
@@ -249,7 +214,6 @@ function rectangle() {
 //Math.PI * 2 * angle/360
 //x = Math.cos(Math.PI * 2 * angle/360); and y = Math.sin(Math.PI * 2 * angle/360);
 
-
 function streetView() {
     //var london = new google.maps.LatLng(51.51, -0.17);
     var london = {lat: 51.51, lng: -0.17};
@@ -265,7 +229,6 @@ function streetView() {
     var infowindow = new google.maps.InfoWindow({
         content: '<div id="ndiv" style="width:200px;height:200px;"></div>'
     });
-
 
     marker.addListener('mouseup',
             function () {
@@ -287,7 +250,6 @@ function setCoordinate() { // Prompt function to choose coordinate
     var lon = prompt('Longitude');
     var lat = prompt('Latitude');
     map.panTo(new google.maps.LatLng(lon, lat));
-    map.setMapTypeId('terrain');
     document.getElementById('coordbutton').innerHTML = 'Change coordinate | ' + lon + ',' + lat;
 }
 
@@ -298,36 +260,6 @@ function getRandomLocation() {
     return randomLocation;
 }
 
-
-function random100() {
-
-    var local = new google.maps.LatLng(-34.397, 150.644);
-    for (var i = 0; i < 1000; i++) {
-
-        var latitude = (Math.random() * 2 * 2 * 100) / 100 - 2; // random number from 2 to -2
-        var longitude = (Math.random() * 2 * 2 * 100) / 100 - 2;
-
-
-        var circleRadius = 2; // Max radius
-        // var circleRadius = Math.sqrt(2 * 2 + 2 * 2); // radius in x y location
-        var currentCircle = Math.sqrt(latitude * latitude + longitude * longitude);
-
-        console.log(circleRadius);
-        console.log(currentCircle);
-
-        if (currentCircle < circleRadius) {
-            var reandomPosition = {lat: -34.397 + latitude, lng: 150.644 + longitude};
-            new google.maps.Marker({
-                position: reandomPosition,
-                map: map,
-                title: 'I am here Green',
-                icon: ' http://maps.google.com/mapfiles/ms/icons/green-dot.png'
-                        //can be pink, yellow or purple
-            });
-        }
-
-    }
-}
 
 function question1() {
     map.setZoom(4);
@@ -345,25 +277,17 @@ function question1() {
     });
     // console.log(e.latLng.lat());
     //console.log(e.latLng.lat() + 1);
-    var north = new google.maps.Marker({
-        position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()},
-        map: map});
-    var east = new google.maps.Marker({
-        position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33},
-        map: map});
-    var south = new google.maps.Marker({
-        position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()},
-        map: map});
-    var west = new google.maps.Marker({
-        position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33},
-        map: map});
+    var north = new google.maps.Marker({position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()}, map: map});
+    var east = new google.maps.Marker({position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33}, map: map});
+    var south = new google.maps.Marker({position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()}, map: map});
+    var west = new google.maps.Marker({position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33}, map: map});
 
     middleAction(north);
     middleAction(east);
     middleAction(south);
     middleAction(west);
     function middleAction(uniqueMarker) {
-        google.maps.event.addListener(uniqueMarker, 'click', function (e) {
+        google.maps.event.addListener(uniqueMarker, 'click', function () {
             console.log("Map location");
             map.panTo(uniqueMarker.position);
             var middleMarker = new google.maps.Marker({
@@ -371,18 +295,16 @@ function question1() {
                 map: map,
                 icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
             map.panTo(middleMarker.position);
-            map.setZoom(6);
-            google.maps.event.addListener(middleMarker, 'click', function () {
-                antipode(middleMarker.position);
-            });
+            map.setZoom(5);
+            //google.maps.event.addListener(middleMarker, 'click', function () {antipode(middleMarker.position);}); // for the middle point markers
         });
     }
-    // });
+    
     function antipode(location) {
-        console.log('Clicked white original' + location);
+        console.log('Clicked original' + location);
         map.panTo(location);
-        var antipodelat = location.lat() * -1;
-        var antipodelng = location.lng() + 180;
+        var antipodelat = location.lat() * -1; // The latitude of the point, with a change of sign: θa = −θ
+        var antipodelng = location.lng() + 180; // Automatically over lapses when over 180
 
         var antipodelocation = new google.maps.LatLng(antipodelat, antipodelng);
         console.log(antipodelocation.lat(), antipodelocation.lng());
@@ -700,6 +622,6 @@ function button7() {
 
 // -- dom actuib listeber
 //google.maps.event.addDomListener(window, 'load', initialize);
-window.addEventListener('load',initialize);
+window.addEventListener('load', initialize);
 
 
