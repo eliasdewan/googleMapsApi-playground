@@ -299,7 +299,7 @@ function question1() {
             //google.maps.event.addListener(middleMarker, 'click', function () {antipode(middleMarker.position);}); // for the middle point markers
         });
     }
-    
+
     function antipode(location) {
         console.log('Clicked original' + location);
         map.panTo(location);
@@ -559,7 +559,8 @@ function button7() {
                     console.log(result.routes);
                     console.log(result.routes.length);
 
-                    var openWindow = [];
+                    //var openWindow = [];
+                    var openWindow = null;
                     for (var i = 0; result.routes.length > i; i++) {
                         console.log('in loop');
                         console.log('Printing leg now');
@@ -578,22 +579,30 @@ function button7() {
                                 var marker = new google.maps.Marker({map: map, position: result.routes[i].legs[0].steps[ii].start_location, animation: google.maps.Animation.DROP});
                                 google.maps.event.addListener(marker, 'click',
                                         function () {
-                                            if (openWindow.length > 0) {
+                                            if (openWindow !== null) {
                                                 console.log(openWindow);
-                                                openWindow[0].close();
-                                                openWindow.pop();
+                                                openWindow.close();
+                                                openWindow = null;
                                             }
+                                            /* if (openWindow.length > 0) {
+                                             console.log(openWindow);
+                                             openWindow[0].close();
+                                             openWindow.pop();
+                                             }*/
                                             var infowindow = new google.maps.InfoWindow({
                                                 content: '<div id="ndiv' + ii + '" style="width:300px;height:300px;"></div>'
                                             });
                                             infowindow.open(map, marker);
-                                            openWindow.push(infowindow);
+                                            //openWindow.push(infowindow);
+                                            openWindow = infowindow;
                                             //google.maps.event.addListener('click', () => {infowindow.close();});
                                             var sv = new google.maps.StreetViewService();
                                             sv.getPanorama({location: marker.position, radius: 50}, function (data, status) { // search radius
                                                 if (status === 'OK')
                                                 {
                                                     panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv' + ii), {position: data.location.latLng});
+                                                    //console.log(panorama.getPosition().toJSON()); // Next line for mooving the info window with the marker
+                                                    google.maps.event.addListener(panorama,'position_changed',()=>infowindow.setPosition(panorama.getPosition()));
                                                 } else {
                                                     alert('Street View data not found for this location.');
                                                 }
@@ -623,5 +632,8 @@ function button7() {
 // -- dom actuib listeber
 //google.maps.event.addDomListener(window, 'load', initialize);
 window.addEventListener('load', initialize);
+
+
+
 
 
