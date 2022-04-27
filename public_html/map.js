@@ -254,7 +254,7 @@ function setCoordinate() { // Prompt function to choose coordinate
 }
 
 function getRandomLocation() {
-    var latitude = (Math.random() * 90 * 2 * 10000) / 10000 - 90; // -90 to 90
+    var latitude = (Math.random() * 85 * 2 * 10000) / 10000 - 85; // -90 to 90 -- map limit is 85
     var longitude = (Math.random() * 180 * 2 * 10000) / 10000 - 180; // -180 to 90
     var randomLocation = new google.maps.LatLng(latitude, longitude);
     return randomLocation;
@@ -262,11 +262,12 @@ function getRandomLocation() {
 
 
 function question1() {
-    map.setZoom(4);
+    map.setZoom(5);
     var firstPosition = getRandomLocation();
     // var action = google.maps.event.addListener(map, 'click', function (e) {
     //var firstPosition = e.latLng;
     map.panTo(firstPosition);
+    const spherical = google.maps.geometry.spherical;
     var marker = new google.maps.Marker({
         position: firstPosition,
         map: map,
@@ -275,58 +276,51 @@ function question1() {
     google.maps.event.addListener(marker, 'click', function () {
         antipode(marker.position);
     });
-    // console.log(e.latLng.lat());
-    //console.log(e.latLng.lat() + 1);
-    var north = new google.maps.Marker({position: {lat: firstPosition.lat() + 8.33, lng: firstPosition.lng()}, map: map});
-    var east = new google.maps.Marker({position: {lat: firstPosition.lat(), lng: firstPosition.lng() + 8.33}, map: map});
-    var south = new google.maps.Marker({position: {lat: firstPosition.lat() - 8.33, lng: firstPosition.lng()}, map: map});
-    var west = new google.maps.Marker({position: {lat: firstPosition.lat(), lng: firstPosition.lng() - 8.33}, map: map});
 
-    middleAction(north);
-    middleAction(east);
-    middleAction(south);
-    middleAction(west);
+    function addMarker(position, activeAction) {
+        var cretedMarker = new google.maps.Marker({position: position, map: map});
+        if (activeAction === true) {
+            middleAction(cretedMarker);
+        }
+        return cretedMarker;
+    }
+    addMarker(spherical.computeOffset(firstPosition, 500000, 0), true);
+    addMarker(spherical.computeOffset(firstPosition, 500000, 90), true);
+    addMarker(spherical.computeOffset(firstPosition, 500000, 180), true);
+    addMarker(spherical.computeOffset(firstPosition, 500000, 270), true);
+
     function middleAction(uniqueMarker) {
         google.maps.event.addListener(uniqueMarker, 'click', function () {
-            console.log("Map location");
-            map.panTo(uniqueMarker.position);
-            var middleMarker = new google.maps.Marker({
-                position: google.maps.geometry.spherical.interpolate(firstPosition, uniqueMarker.position, 0.5),
-                map: map,
-                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"});
+            var middleMarker = addMarker(spherical.interpolate(firstPosition, uniqueMarker.position, 0.5), false);
             map.panTo(middleMarker.position);
-            map.setZoom(5);
-            //google.maps.event.addListener(middleMarker, 'click', function () {antipode(middleMarker.position);}); // for the middle point markers
+            middleMarker.setIcon("https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png");
+            //google.maps.event.addListener(middleMarker, 'click', function () {antipode(middleMarker.position);}); // adds antipode transport for the marker
         });
     }
 
     function antipode(location) {
         console.log('Clicked original' + location);
-        map.panTo(location);
         var antipodelat = location.lat() * -1; // The latitude of the point, with a change of sign: θa = −θ
         var antipodelng = location.lng() + 180; // Automatically over lapses when over 180
 
         var antipodelocation = new google.maps.LatLng(antipodelat, antipodelng);
-        console.log(antipodelocation.lat(), antipodelocation.lng());
         map.panTo(antipodelocation);
-        var antinorth = new google.maps.Marker({position: {lat: antipodelocation.lat() + 5, lng: antipodelocation.lng()}, map: map});
-        var antieast = new google.maps.Marker({position: {lat: antipodelocation.lat(), lng: antipodelocation.lng() + 5}, map: map});
-        var antisouth = new google.maps.Marker({position: {lat: antipodelocation.lat() - 5, lng: antipodelocation.lng()}, map: map});
-        var antiwest = new google.maps.Marker({position: {lat: antipodelocation.lat(), lng: antipodelocation.lng() - 5}, map: map});
-        map.setZoom(4);
-
+        var antinorth = addMarker(spherical.computeOffset(antipodelocation, 300000, 0), false);
+        var antieast = addMarker(spherical.computeOffset(antipodelocation, 300000, 90), false);
+        var antisouth = addMarker(spherical.computeOffset(antipodelocation, 300000, 180), false);
+        var antiwest = addMarker(spherical.computeOffset(antipodelocation, 300000, 270), false);
+        map.setZoom(6);
+        
         var antifill = new google.maps.Polygon({
-            paths: [new google.maps.LatLng(antinorth.position), new google.maps.LatLng(antieast.position), new google.maps.LatLng(antisouth.position), new google.maps.LatLng(antiwest.position)],
+            paths: [antinorth.position, antieast.position, antisouth.position, antiwest.position],
             strokeColor: "#FF0000",
             strokeOpacity: 0,
             strokeWeight: 2,
             fillOpacity: 0.1
         });
 
-
         document.getElementById('perimeterColorOn').addEventListener("click", () => {
-            antifill.setMap(map);
-
+            antifill.setMap(map);// starts the fill
 
             google.maps.event.addListener(antifill, 'mouseover', function () {
                 console.log('Fill area hover');
@@ -410,22 +404,22 @@ function button4() {
             fillColor: "#FF0000",
             fillOpacity: 0.35,
             map,
-            bounds: new google.maps.LatLngBounds(
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
-                    )
-
-                    /*{
-                     north: spherical.computeOffset(location.latLng, 150000, 0).lat(),
-                     south: spherical.computeOffset(location.latLng, 150000, 180).lat(),
-                     east: spherical.computeOffset(location.latLng, 150000, 90).lng(),
-                     west: spherical.computeOffset(location.latLng, 150000, 270).lng()
-                     
-                     north: location.latLng.lat() + 300 / 111,
-                     south: location.latLng.lat() - 300 / 111,
-                     east: location.latLng.lng() + 300 / 111,
-                     west: location.latLng.lng() - 300 / 111 
-                     } */
+            bounds: /*new google.maps.LatLngBounds(
+             spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
+             spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
+             )
+             
+             {
+             north: spherical.computeOffset(location.latLng, 150000, 0).lat(),
+             south: spherical.computeOffset(location.latLng, 150000, 180).lat(),
+             east: spherical.computeOffset(location.latLng, 150000, 90).lng(),
+             west: spherical.computeOffset(location.latLng, 150000, 270).lng()}
+             */
+                    {north: location.latLng.lat() + 300 / 111,
+                        south: location.latLng.lat() - 300 / 111,
+                        east: location.latLng.lng() + 300 / 111,
+                        west: location.latLng.lng() - 300 / 111
+                    }
         });
         //;
 
