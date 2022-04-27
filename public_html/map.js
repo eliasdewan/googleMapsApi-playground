@@ -435,28 +435,11 @@ function button4() {
 
         var maxlat = square.getBounds().getNorthEast().lat() - square.getBounds().getSouthWest().lat();
         var maxlng = square.getBounds().getNorthEast().lng() - square.getBounds().getSouthWest().lng();
-        for (var i = 0; i <= 3;i++ ) {
+        for (var i = 0; i <= 3; i++) {
             var loclng = location.latLng.lng() + (Math.random() * maxlng - maxlng / 2);
             var loclat = location.latLng.lat() + (Math.random() * maxlat - maxlat / 2);
-            console.log('supposed to create marker');
-            console.log(maxlat);
-            console.log(maxlng);
-            console.log(loclat);
-            console.log(loclng);
-            console.log(location.latLng.lng());
-            console.log(location.latLng.lat());
-            console.log(new google.maps.LatLng(loclat, loclng));
-            
             squareMarkers(new google.maps.LatLng(loclat, loclng));
-            
-            
         }
-
-
-
-
-
-
     });
 }
 
