@@ -411,8 +411,8 @@ function button4() {
             fillOpacity: 0.35,
             map,
             bounds: new google.maps.LatLngBounds(
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 225),
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 45)
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
                     )
 
                     /*{
@@ -450,21 +450,21 @@ function button4() {
         //new google.maps.places.PlacePlusCode.getGlobalCode(square.getBounds().getNorthEast());
 
         function squareMarkers(location) {
-            var Http = new XMLHttpRequest();
-            var plus = 'https://plus.codes/api?address=' + location.lat() + ',' + location.lng();
-            Http.open("GET", plus, false);
-            Http.send();
-            var webreturn = JSON.parse(Http.responseText);
-            // console.log((webreturn.plus_code.global_code));
 
-            var smarker = new google.maps.Marker({
-                position: location,
-                map,
-                title: "Square marker "}
-            );
-            var InfoWindow = new google.maps.InfoWindow({content: webreturn.plus_code.global_code});
-            google.maps.event.addListener(smarker, 'click', function () {
-                InfoWindow.open(map, this);
+            var smarker = new google.maps.Marker({position: location, map});
+
+            var infoWindow = new google.maps.InfoWindow({position: location});
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({location: location}, function (results, status) {
+                if (status === 'OK') {
+                    infoWindow.setContent(results[0].formatted_address);
+                } else {
+                    console.log('Geocode was not successful for the following reason: ' + status);
+                    infoWindow.setContent('no address found');
+                }
+                google.maps.event.addListener(smarker, 'click', function () {
+                    infoWindow.open(map);
+                });
             });
         }
     });
@@ -488,6 +488,7 @@ function button5() {
         points.push(clicklocation.latLng.toJSON());
         area.setOptions({paths: points});
         boundsofPolygon.extend(clicklocation.latLng);
+
         var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
         var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
         if (areaLng < 0) {
@@ -506,11 +507,9 @@ function button5() {
                 area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"});
                 for (var i = 0; i <= 100; ) {
                     var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * areaLng * 2) - areaLng, lng: boundsofPolygon.getCenter().lng() + (Math.random() * areaLat * 2) - areaLat};
+
                     if (google.maps.geometry.poly.containsLocation(currentPosition, area)) {
-                        var singleMarker = new google.maps.Marker({
-                            position: currentPosition,
-                            map: map
-                        });
+                        var singleMarker = new google.maps.Marker({position: currentPosition, map: map});
                         hundredMarkers.push(singleMarker);
                         heatmapData.push(singleMarker.position);
                         i++;
@@ -584,7 +583,6 @@ function button7() {
                     console.log(result.routes);
                     console.log(result.routes.length);
 
-                    //var openWindow = [];
                     var openWindow = null;
                     for (var i = 0; result.routes.length > i; i++) {
                         console.log('in loop');
@@ -609,18 +607,10 @@ function button7() {
                                                 openWindow.close();
                                                 openWindow = null;
                                             }
-                                            /* if (openWindow.length > 0) {
-                                             console.log(openWindow);
-                                             openWindow[0].close();
-                                             openWindow.pop();
-                                             }*/
-                                            var infowindow = new google.maps.InfoWindow({
-                                                content: '<div id="ndiv' + ii + '" style="width:300px;height:300px;"></div>'
-                                            });
+
+                                            var infowindow = new google.maps.InfoWindow({content: '<div id="ndiv' + ii + '" style="width:300px;height:300px;"></div>'});
                                             infowindow.open(map, marker);
-                                            //openWindow.push(infowindow);
                                             openWindow = infowindow;
-                                            //google.maps.event.addListener('click', () => {infowindow.close();});
                                             var sv = new google.maps.StreetViewService();
                                             sv.getPanorama({location: marker.position, radius: 50}, function (data, status) { // search radius
                                                 if (status === 'OK')
@@ -636,23 +626,12 @@ function button7() {
                             })();
                         }
                     }
-                    //directionsRenderer.setDirections(result);
-                    //new google.maps.DirectionsRenderer({map: map, directions: result});
-
-
-                    // directionsroute interface->legs contains direction leg array - the leg has array steps directionsteps wich can have sub steps
                 }
             });
         }
         ;
-
     });
-
-
-
 }
-
-
 
 // -- dom actuib listeber
 //google.maps.event.addDomListener(window, 'load', initialize);
