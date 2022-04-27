@@ -310,7 +310,7 @@ function question1() {
         var antisouth = addMarker(spherical.computeOffset(antipodelocation, 300000, 180), false);
         var antiwest = addMarker(spherical.computeOffset(antipodelocation, 300000, 270), false);
         map.setZoom(6);
-        
+
         var antifill = new google.maps.Polygon({
             paths: [antinorth.position, antieast.position, antisouth.position, antiwest.position],
             strokeColor: "#FF0000",
@@ -336,24 +336,13 @@ function question1() {
 
 function button3() {
     var circle = new google.maps.Circle();
-    google.maps.event.addListenerOnce(map, 'click', function (e) {
-        console.log(e.latLng);
-        var q2marker = new google.maps.Marker({
-            position: e.latLng, //new google.maps.LatLng(-34, 150), //choosen position from the user
-            map: map
-        });
-        map.panTo(q2marker.position);
-        //    google.maps.event.addListenerOnce(q2marker, 'click', function () {
-        var angle = Math.random() * 360;
-        var radius = 10 / 3;
-        var x = radius * Math.sin(Math.PI * 2 * angle / 360);
-        var y = radius * Math.cos(Math.PI * 2 * angle / 360);
-        map.setZoom(7);
+    const spherical = google.maps.geometry.spherical;
+    google.maps.event.addListenerOnce(map, 'click', function (click) {
+        var q2marker = new google.maps.Marker({position: click.latLng, map: map});
 
-        rmarker = new google.maps.Marker({
-            position: {lat: q2marker.position.lat() + y, lng: q2marker.position.lng() + x}, //choosen position from the user
-            map: map
-        });
+
+        var locationtouse = spherical.computeOffset(click.latLng, 200000, Math.random() * 360); // Location, Distance in km , Angle - random
+        var rmarker = new google.maps.Marker({position: locationtouse, map: map});
 
         var distance = google.maps.geometry.spherical.computeDistanceBetween(q2marker.position, rmarker.position);
         var middlePoint = google.maps.geometry.spherical.interpolate(q2marker.position, rmarker.position, 0.5);
@@ -367,13 +356,12 @@ function button3() {
             center: middlePoint,
             radius: distance / 2});
         map.panTo(circle.getCenter());
+        map.setZoom(8);
 
         google.maps.event.addListener(circle, 'click', () => {
             for (var i = 0; i <= 10; i++) {
                 var color = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                //console.log(color);
-                // var angle = Math.random() * 360;  
-                // var location = google.maps.geometry.spherical.computeOffset(circle.getCenter(),circle.getRadius(),angle);                        
+                var centerLocation = google.maps.geometry.spherical.computeOffset(circle.getCenter(), circle.getRadius(), Math.random() * 360);
                 new google.maps.Circle({
                     strokeColor: color,
                     strokeOpacity: 9,
@@ -382,11 +370,10 @@ function button3() {
                     fillOpacity: 0.8,
                     map,
                     radius: 10000,
-                    center: google.maps.geometry.spherical.computeOffset(circle.getCenter(), circle.getRadius(), Math.random() * 360)
+                    center: centerLocation
                 });
             }
         });
-        //   });
     });
 }
 //69 miles (111 kilometers)
@@ -404,28 +391,14 @@ function button4() {
             fillColor: "#FF0000",
             fillOpacity: 0.35,
             map,
-            bounds: /*new google.maps.LatLngBounds(
-             spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
-             spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
-             )
-             
-             {
-             north: spherical.computeOffset(location.latLng, 150000, 0).lat(),
-             south: spherical.computeOffset(location.latLng, 150000, 180).lat(),
-             east: spherical.computeOffset(location.latLng, 150000, 90).lng(),
-             west: spherical.computeOffset(location.latLng, 150000, 270).lng()}
-             */
-                    {north: location.latLng.lat() + 300 / 111,
-                        south: location.latLng.lat() - 300 / 111,
-                        east: location.latLng.lng() + 300 / 111,
-                        west: location.latLng.lng() - 300 / 111
-                    }
+            bounds: new google.maps.LatLngBounds(
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
+                    )
         });
-        //;
 
 
         console.log('spherical.computeOffset(location,150000,0)');
-
         //console.log(google.maps.LatLngBounds(location.latLng,Math.hypot(150000, 15000),45));
         console.log(google.maps.LatLngBounds(spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 45), spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 225)));
         console.log('up');
@@ -433,15 +406,6 @@ function button4() {
         // console.log(spherical.computeOffset(location.latLng, 150000, 0));
         console.log(square.getBounds().getNorthEast());
         console.log(square);
-
-        squareMarkers(square.getBounds().getNorthEast());
-        squareMarkers(new google.maps.LatLng(square.getBounds().getNorthEast().lat(), square.getBounds().getSouthWest().lng()));
-        squareMarkers(new google.maps.LatLng(square.getBounds().getSouthWest().lat(), square.getBounds().getNorthEast().lng()));
-        squareMarkers(square.getBounds().getSouthWest());
-
-
-        // new google.maps.PlusCode.Builder.getGlobalCode(square.getBounds().getNorthEast());
-        //new google.maps.places.PlacePlusCode.getGlobalCode(square.getBounds().getNorthEast());
 
         function squareMarkers(location) {
 
@@ -461,6 +425,38 @@ function button4() {
                 });
             });
         }
+
+        squareMarkers(location.latLng);
+        squareMarkers(square.getBounds().getNorthEast());
+        squareMarkers(new google.maps.LatLng(square.getBounds().getNorthEast().lat(), square.getBounds().getSouthWest().lng()));
+        squareMarkers(new google.maps.LatLng(square.getBounds().getSouthWest().lat(), square.getBounds().getNorthEast().lng()));
+        squareMarkers(square.getBounds().getSouthWest());
+
+
+        var maxlat = square.getBounds().getNorthEast().lat() - square.getBounds().getSouthWest().lat();
+        var maxlng = square.getBounds().getNorthEast().lng() - square.getBounds().getSouthWest().lng();
+        for (var i = 0; i <= 3;i++ ) {
+            var loclng = location.latLng.lng() + (Math.random() * maxlng - maxlng / 2);
+            var loclat = location.latLng.lat() + (Math.random() * maxlat - maxlat / 2);
+            console.log('supposed to create marker');
+            console.log(maxlat);
+            console.log(maxlng);
+            console.log(loclat);
+            console.log(loclng);
+            console.log(location.latLng.lng());
+            console.log(location.latLng.lat());
+            console.log(new google.maps.LatLng(loclat, loclng));
+            
+            squareMarkers(new google.maps.LatLng(loclat, loclng));
+            
+            
+        }
+
+
+
+
+
+
     });
 }
 
