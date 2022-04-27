@@ -397,16 +397,6 @@ function button4() {
                     )
         });
 
-
-        console.log('spherical.computeOffset(location,150000,0)');
-        //console.log(google.maps.LatLngBounds(location.latLng,Math.hypot(150000, 15000),45));
-        console.log(google.maps.LatLngBounds(spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 45), spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 225)));
-        console.log('up');
-        console.log(spherical.computeOffset(location.latLng, 150000, 0).lng());
-        // console.log(spherical.computeOffset(location.latLng, 150000, 0));
-        console.log(square.getBounds().getNorthEast());
-        console.log(square);
-
         function squareMarkers(location) {
 
             var smarker = new google.maps.Marker({position: location, map});
