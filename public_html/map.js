@@ -322,9 +322,12 @@ function question1() {
             strokeWeight: 2,
             fillOpacity: 0.1
         });
-        antifill.setMap(map);
+
 
         document.getElementById('perimeterColorOn').addEventListener("click", () => {
+            antifill.setMap(map);
+
+
             google.maps.event.addListener(antifill, 'mouseover', function () {
                 console.log('Fill area hover');
                 this.setOptions({strokeOpacity: 1});
@@ -399,6 +402,7 @@ function button4() {
         map.panTo(location.latLng);
         map.setZoom(6.5);
         console.log('button 4 inside click');
+        var spherical = google.maps.geometry.spherical;
         var square = new google.maps.Rectangle({
             strokeColor: "#FF0000",
             strokeOpacity: 0.8,
@@ -406,14 +410,35 @@ function button4() {
             fillColor: "#FF0000",
             fillOpacity: 0.35,
             map,
-            bounds: {
-                north: location.latLng.lat() + 300 / 111,
-                south: location.latLng.lat() - 300 / 111,
-                east: location.latLng.lng() + 300 / 111,
-                west: location.latLng.lng() - 300 / 111
-            }
+            bounds: new google.maps.LatLngBounds(
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 225),
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 45)
+                    )
+
+                    /*{
+                     north: spherical.computeOffset(location.latLng, 150000, 0).lat(),
+                     south: spherical.computeOffset(location.latLng, 150000, 180).lat(),
+                     east: spherical.computeOffset(location.latLng, 150000, 90).lng(),
+                     west: spherical.computeOffset(location.latLng, 150000, 270).lng()
+                     
+                     north: location.latLng.lat() + 300 / 111,
+                     south: location.latLng.lat() - 300 / 111,
+                     east: location.latLng.lng() + 300 / 111,
+                     west: location.latLng.lng() - 300 / 111 
+                     } */
         });
+        //;
+
+
+        console.log('spherical.computeOffset(location,150000,0)');
+
+        //console.log(google.maps.LatLngBounds(location.latLng,Math.hypot(150000, 15000),45));
+        console.log(google.maps.LatLngBounds(spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 45), spherical.computeOffset(location.latLng, Math.hypot(150000, 15000), 225)));
+        console.log('up');
+        console.log(spherical.computeOffset(location.latLng, 150000, 0).lng());
+        // console.log(spherical.computeOffset(location.latLng, 150000, 0));
         console.log(square.getBounds().getNorthEast());
+        console.log(square);
 
         squareMarkers(square.getBounds().getNorthEast());
         squareMarkers(new google.maps.LatLng(square.getBounds().getNorthEast().lat(), square.getBounds().getSouthWest().lng()));
@@ -511,7 +536,7 @@ function button6() {
         map.overlayMapTypes.clear();
     } else {
         var weatherLayer = new google.maps.ImageMapType({
-            maxZoom: 18,
+            //maxZoom: 18,
             tileSize: new google.maps.Size(256, 256),
             getTileUrl: function (coord, zoom) {
                 return 'https://tile.openweathermap.org/map/clouds_new/' + zoom + '/' + coord.x + '/' + coord.y + '.png?appid=0af3058a2bca33028fae5ed6dd50664c';
@@ -602,7 +627,7 @@ function button7() {
                                                 {
                                                     panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv' + ii), {position: data.location.latLng});
                                                     //console.log(panorama.getPosition().toJSON()); // Next line for mooving the info window with the marker
-                                                    google.maps.event.addListener(panorama,'position_changed',()=>infowindow.setPosition(panorama.getPosition()));
+                                                    google.maps.event.addListener(panorama, 'position_changed', () => infowindow.setPosition(panorama.getPosition()));
                                                 } else {
                                                     alert('Street View data not found for this location.');
                                                 }
