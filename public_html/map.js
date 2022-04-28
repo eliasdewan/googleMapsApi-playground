@@ -524,24 +524,28 @@ function button7() {
     var directionsService = new google.maps.DirectionsService();
     var locations = [];
     var request;
-
+    var micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue@.png";
     new google.maps.event.addListener(map, 'click', (clickPoint) => {
         locations.push(clickPoint.latLng);
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({location: clickPoint.latLng}, function (results, status) {
-            if (status === 'OK') {
 
-                console.log(results[0].formatted_address);
-                console.log(results[0]);
-                console.log(results[0].plus_code);
-                var infoWindow = new google.maps.InfoWindow({content: results[0].formatted_address, position: clickPoint.latLng});
-                infoWindow.open(map);
-            } else {
-                console.log('Geocode was not successful for the following reason: ' + status);
-                var infoWindow = new google.maps.InfoWindow({content: 'no address found', position: clickPoint.latLng});
-                infoWindow.open(map);
-            }
-        });
+        new google.maps.Marker({map: map, position: clickPoint.latLng, animation: google.maps.Animation.DROP, icon: micon});
+        micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_grey%23.png";
+        /*
+         const geocoder = new google.maps.Geocoder();
+         geocoder.geocode({location: clickPoint.latLng}, function (results, status) {
+         if (status === 'OK') {
+         
+         console.log(results[0].formatted_address);
+         console.log(results[0]);
+         console.log(results[0].plus_code);
+         var infoWindow = new google.maps.InfoWindow({content: results[0].formatted_address, position: clickPoint.latLng});
+         infoWindow.open(map);
+         } else {
+         console.log('Geocode was not successful for the following reason: ' + status);
+         var infoWindow = new google.maps.InfoWindow({content: 'no address found', position: clickPoint.latLng});
+         infoWindow.open(map);
+         }
+         });*/
 
         //new google.maps.Marker({position: clickPoint.latLng, map: map});
         console.log(clickPoint.latLng);
