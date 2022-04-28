@@ -529,8 +529,6 @@ function button7() {
     new google.maps.event.addListener(map, 'click', (clickPoint) => {
         locations.push(clickPoint.latLng);
 
-        //if (locations.length > 0){console.log('this is now going to bve destination');}
-
         var pointmarker = new google.maps.Marker({map: map, position: clickPoint.latLng, animation: google.maps.Animation.DROP, icon: micon});
         micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_grey%23.png";
 
@@ -542,7 +540,6 @@ function button7() {
         google.maps.event.addListener(pointmarker, 'click', () => {
             (function () {
                 if (openWindow !== null) {
-                    console.log(openWindow);
                     openWindow.close();
                     openWindow = null;
                 }
@@ -562,41 +559,14 @@ function button7() {
             }());
         });
 
-
-
-
-
-        //new google.maps.Marker({position: clickPoint.latLng, map: map});
-        console.log(clickPoint.latLng);
-        console.log(clickPoint.latLng.toJSON());
-
         if (locations.length >= 2) {
             google.maps.event.clearListeners(map, 'click');
             request = {origin: locations[0], destination: locations[1], travelMode: 'DRIVING', provideRouteAlternatives: true};
 
             directionsService.route(request, function (result, status) {
                 if (status === 'OK') {
-                    console.log('passed ok state');
-                    console.log(result.routes);
-                    console.log(result.routes.length);
-
-                    //var render = new google.maps.DirectionsRenderer({map: map,draggable:true,panel: document.getElementById('direction'),directions: result, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
-                    //google.maps.event.addListener(render,'directions_changed',()=>{console.log('directions changed');});
-
-
                     for (var i = 0; result.routes.length > i; i++) {
-                        /*
-                         console.log('in loop');
-                         console.log('Printing leg now');
-                         console.log(result.routes[i].legs[0].steps);
-                         console.log(result.routes[i].legs[0].steps[0].instructions);
-                         console.log(result.routes[i].legs[0].steps[0].start_location.toJSON());
-                         console.log(result.routes[i].legs[0].steps[0].start_point.toJSON());
-                         console.log(result.routes[i].legs[0].steps[0].end_location.toJSON());//same
-                         console.log(result.routes[i].legs[0].steps[0].end_point.toJSON());
-                         console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
-                         console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
-                         */
+
                         new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeWeight: 5, strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
                         for (var ii = 0; result.routes[i].legs[0].steps.length > ii; ii++) {
                             (function () {
@@ -604,7 +574,6 @@ function button7() {
                                 google.maps.event.addListener(marker, 'click',
                                         function () {
                                             if (openWindow !== null) {
-                                                console.log(openWindow);
                                                 openWindow.close();
                                                 openWindow = null;
                                             }
@@ -617,7 +586,7 @@ function button7() {
                                                 if (status === 'OK')
                                                 {
                                                     panorama = new google.maps.StreetViewPanorama(document.getElementById('ndiv' + ii), {position: data.location.latLng});
-                                                    //console.log(panorama.getPosition().toJSON()); // Next line for mooving the info window with the marker
+                                                    // Next line for mooving the info window with the marker
                                                     google.maps.event.addListener(panorama, 'position_changed', () => infowindow.setPosition(panorama.getPosition()));
                                                 } else {
                                                     alert('Street View data not found for this location.');
