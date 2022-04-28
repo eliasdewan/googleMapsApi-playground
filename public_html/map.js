@@ -318,7 +318,8 @@ function question1() {
             strokeWeight: 2,
             fillOpacity: 0.1
         });
-
+        document.getElementById('perimeterColorOn').style.backgroundColor = 'red';
+        console.log(document.getElementById('perimeterColorOn').style);
         document.getElementById('perimeterColorOn').addEventListener("click", () => {
             antifill.setMap(map);// starts the fill
 

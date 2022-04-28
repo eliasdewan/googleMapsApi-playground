@@ -11,12 +11,18 @@ and open the template in the editor.
         <meta charset="utf-8">
         <style>
             html, body, #map {
-                width: 100%; 
+                width: 100%;
                 height: 85%;
                 margin:0;
                 padding:0;
             }
-
+            button{
+                margin: 2px;
+                padding: 5px
+            }
+            button span{
+                font-size: xx-small
+            }
         </style>
         <script  src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDzsgXWLl9bXygHMTaBMqHCUAOXZ0J2dCA&libraries=geometry,visualization">
         </script>
@@ -48,19 +54,22 @@ and open the template in the editor.
             <button onclick='randomMarker()'>Random Marker</button>
             <button onclick='random100()'>Random 100</button>
         </div>
-        <div>
-            <div>
-                <button onclick='question1()'>Question 1</button>
-                <button id = 'perimeterColorOn'>Button 2 - enable perimeter by hover</button>
-            </div>
-            <div>
-                <button onclick='button3()'>Button 3</button>
-                <button onclick='button4()'>Button 4</button>
-            </div>
-            <button onclick='button5()'>Button 5</button>
-            <button onclick='button6()'>Button 6</button>
-            <button onclick='button7()'>Button 7</button>
-
+        <div><br><br>
+            <span>Part 1:
+                <button onclick='question1()'>Button 1<br><span>5 markers, four sides and middle</span><br><span>side marks the middle of middle and side</span><br><span>middle for antipode and four side markers</span></button>
+                <button id = 'perimeterColorOn'>Button 2<br><span> Enable perimeter of the four markers by hover</span></button>
+            </span>
+            <span>Part 2:
+                <button onclick='button3()'>Button 3<br><span>Twp markers 200km, circle in middle</span><br><span>Circle click creates 10 markers in perimeter</span></button>
+                <button onclick='button4()'>Button 4<br><span>300km square with geo location markers</span></button>
+            </span>
+            <span>Part 3:
+                <button onclick='button5()'>Button 5<br><span>Interactive create area </span><br><span>hover for 100markers and colour shift</span><br><span>hover out for heatmap and reverse colour</span></button>
+                <button onclick='button6()'>Button 6<br><span>Wind overlay on map </span></button>
+            </span>
+            <span>Part 4:
+                <button onclick='button7()'>Button 7<br><span>Direction with step markers</span><br><span>Marker show streetview infowindow</span></button>
+            </span>
         </div>
         <!--  <img src="fullGoogleMaps.png" alt="Italian Trulli">
           <img src="weatherLayer.png" alt="Italian Trulli"> -->
