@@ -378,11 +378,11 @@ function button3() {
 }
 //69 miles (111 kilometers)
 function button4() {
-    console.log('button 4');
+
     google.maps.event.addListenerOnce(map, 'click', (location) => {
         map.panTo(location.latLng);
         map.setZoom(6.5);
-        console.log('button 4 inside click');
+
         var spherical = google.maps.geometry.spherical;
         var square = new google.maps.Rectangle({
             strokeColor: "#FF0000",
@@ -392,8 +392,8 @@ function button4() {
             fillOpacity: 0.35,
             map,
             bounds: new google.maps.LatLngBounds(
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225, 6378137),
-                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45, 6378137)
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 225),
+                    spherical.computeOffset(location.latLng, Math.hypot(150000, 150000), 45)
                     )
         });
 
@@ -415,7 +415,7 @@ function button4() {
                         }
 
                         infoWindow.setContent(contentHtml);
-                        console.log(results);
+
                     } else {
                         console.log('Geocode was not successful for the following reason: ' + status);
                         infoWindow.setContent('no address found');
@@ -425,14 +425,14 @@ function button4() {
                 infoWindow.open(map);
             });
         }
-
+        // for markers in four corners and middle
         squareMarkers(location.latLng);
         squareMarkers(square.getBounds().getNorthEast());
         squareMarkers(new google.maps.LatLng(square.getBounds().getNorthEast().lat(), square.getBounds().getSouthWest().lng()));
         squareMarkers(new google.maps.LatLng(square.getBounds().getSouthWest().lat(), square.getBounds().getNorthEast().lng()));
         squareMarkers(square.getBounds().getSouthWest());
 
-
+        // For the random 3 markers
         var maxlat = square.getBounds().getNorthEast().lat() - square.getBounds().getSouthWest().lat();
         var maxlng = square.getBounds().getNorthEast().lng() - square.getBounds().getSouthWest().lng();
         for (var i = 0; i < 3; i++) {
@@ -458,44 +458,65 @@ function button5() {
     var density = new google.maps.visualization.HeatmapLayer();
     var boundsofPolygon = new google.maps.LatLngBounds();
     var addPointAction = google.maps.event.addListener(map, 'click', (clicklocation) => {
-        points.push(clicklocation.latLng.toJSON());
+        points.push(clicklocation.latLng);
         area.setOptions({paths: points});
         boundsofPolygon.extend(clicklocation.latLng);
 
-        var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
-        var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
-        if (areaLng < 0) {
-            areaLng += 360;
-        }
+        new google.maps.Marker({
+            position: clicklocation.latLng,
+            map: map,
+            icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
+        });
 
-        console.log(areaLng + ' and ' + areaLat);
+
+
+        console.log(boundsofPolygon);
         if (points.length >= 4) {
             google.maps.event.removeListener(addPointAction);
+            new google.maps.Marker({
+                position: boundsofPolygon.getNorthEast(),
+                map: map,
+                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"
+            });
+            new google.maps.Marker({
+                position: boundsofPolygon.getSouthWest(),
+                map: map,
+                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"
+            });
+            var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
+            var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
+
+            console.log(areaLat + 'lat:lng' + areaLng);
+            if (areaLng < 0) { // for overlapping
+                areaLng += 360;
+                console.log('overlapping');
+            }
             var heatmapData = [];
             var hundredMarkers = [];
 
-            google.maps.event.addListener(area, 'mouseover', () => {
-                density.setMap(null);
-                heatmapData = [];
-                area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"});
-                for (var i = 0; i <= 100; ) {
-                    var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * areaLng * 2) - areaLng, lng: boundsofPolygon.getCenter().lng() + (Math.random() * areaLat * 2) - areaLat};
 
-                    if (google.maps.geometry.poly.containsLocation(currentPosition, area)) {
-                        var singleMarker = new google.maps.Marker({position: currentPosition, map: map});
-                        hundredMarkers.push(singleMarker);
-                        heatmapData.push(singleMarker.position);
-                        i++;
+            google.maps.event.addListener(area, 'mouseover', () => {
+                density.setMap(null); // 
+                heatmapData = [];
+                area.setOptions({strokeColor: "#FF0000", fillColor: "#00ff00"}); // poligon colours
+                for (var i = 0; i <= 100; ) { //hundred markers
+                    var currentPosition = {lat: boundsofPolygon.getCenter().lat() + (Math.random() * areaLat * 2) - areaLat, lng: boundsofPolygon.getCenter().lng() + (Math.random() * areaLng * 2) - areaLng};
+
+                    if (google.maps.geometry.poly.containsLocation(currentPosition, area)) { // validating location inside the bounds
+                        var singleMarker = new google.maps.Marker({position: currentPosition, map: map}); // marker
+                        hundredMarkers.push(singleMarker); // adding for removing later
+                        heatmapData.push(singleMarker.position); // adding the locations for the heat map
+                        i++; // incrementing only when validated contains location
                     }
                 }
+
                 google.maps.event.addListener(area, 'mouseout', () => {
                     for (i = 0; i < hundredMarkers.length; i++) {
-                        hundredMarkers[i].setMap(null);
+                        hundredMarkers[i].setMap(null); // removes the markers
                     }
-                    area.setOptions({strokeColor: "#00ff00", fillColor: "#FF0000"});
-                    // var density = new google.maps.visualization.HeatmapLayer();
-                    density.setOptions({data: heatmapData});
-                    density.setMap(map);
+                    area.setOptions({strokeColor: "#00ff00", fillColor: "#FF0000"}); // poligon colours
+                    density.setOptions({data: heatmapData}); // the array of locations
+                    density.setMap(map); // view the heatmap on the map
                 });
             });
         }
