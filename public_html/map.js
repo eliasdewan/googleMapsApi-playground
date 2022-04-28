@@ -523,29 +523,48 @@ function button7() {
     map.setZoom(15);
     var directionsService = new google.maps.DirectionsService();
     var locations = [];
+    var openWindow = null;
     var request;
     var micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue@.png";
     new google.maps.event.addListener(map, 'click', (clickPoint) => {
         locations.push(clickPoint.latLng);
 
-        new google.maps.Marker({map: map, position: clickPoint.latLng, animation: google.maps.Animation.DROP, icon: micon});
+        //if (locations.length > 0){console.log('this is now going to bve destination');}
+
+        var pointmarker = new google.maps.Marker({map: map, position: clickPoint.latLng, animation: google.maps.Animation.DROP, icon: micon});
         micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_grey%23.png";
-        /*
-         const geocoder = new google.maps.Geocoder();
-         geocoder.geocode({location: clickPoint.latLng}, function (results, status) {
-         if (status === 'OK') {
-         
-         console.log(results[0].formatted_address);
-         console.log(results[0]);
-         console.log(results[0].plus_code);
-         var infoWindow = new google.maps.InfoWindow({content: results[0].formatted_address, position: clickPoint.latLng});
-         infoWindow.open(map);
-         } else {
-         console.log('Geocode was not successful for the following reason: ' + status);
-         var infoWindow = new google.maps.InfoWindow({content: 'no address found', position: clickPoint.latLng});
-         infoWindow.open(map);
-         }
-         });*/
+
+
+
+
+
+
+        google.maps.event.addListener(pointmarker, 'click', () => {
+            (function () {
+                if (openWindow !== null) {
+                    console.log(openWindow);
+                    openWindow.close();
+                    openWindow = null;
+                }
+                var infoWindow = new google.maps.InfoWindow({content: '<div id="start' + locations.length + '" style="width:300px;height:300px;"></div>', position: clickPoint.latLng});
+                var sv = new google.maps.StreetViewService();
+                sv.getPanorama({location: clickPoint.latLng, radius: 50}, function (data, status) { // search radius
+                    if (status === 'OK')
+                    {
+                        new google.maps.StreetViewPanorama(document.getElementById('start' + locations.length), {position: data.location.latLng});
+                    } else {
+                        alert('Street View data not found for this location.');
+                    }
+                });
+
+                infoWindow.open(map);
+                openWindow = infoWindow;
+            }());
+        });
+
+
+
+
 
         //new google.maps.Marker({position: clickPoint.latLng, map: map});
         console.log(clickPoint.latLng);
@@ -561,20 +580,24 @@ function button7() {
                     console.log(result.routes);
                     console.log(result.routes.length);
 
-                    var openWindow = null;
-                    for (var i = 0; result.routes.length > i; i++) {
-                        console.log('in loop');
-                        console.log('Printing leg now');
-                        console.log(result.routes[i].legs[0].steps);
-                        console.log(result.routes[i].legs[0].steps[0].instructions);
-                        console.log(result.routes[i].legs[0].steps[0].start_location.toJSON());
-                        console.log(result.routes[i].legs[0].steps[0].start_point.toJSON());
-                        console.log(result.routes[i].legs[0].steps[0].end_location.toJSON());//same
-                        console.log(result.routes[i].legs[0].steps[0].end_point.toJSON());
-                        console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
-                        console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
+                    //var render = new google.maps.DirectionsRenderer({map: map,draggable:true,panel: document.getElementById('direction'),directions: result, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
+                    //google.maps.event.addListener(render,'directions_changed',()=>{console.log('directions changed');});
 
-                        new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
+
+                    for (var i = 0; result.routes.length > i; i++) {
+                        /*
+                         console.log('in loop');
+                         console.log('Printing leg now');
+                         console.log(result.routes[i].legs[0].steps);
+                         console.log(result.routes[i].legs[0].steps[0].instructions);
+                         console.log(result.routes[i].legs[0].steps[0].start_location.toJSON());
+                         console.log(result.routes[i].legs[0].steps[0].start_point.toJSON());
+                         console.log(result.routes[i].legs[0].steps[0].end_location.toJSON());//same
+                         console.log(result.routes[i].legs[0].steps[0].end_point.toJSON());
+                         console.log(result.routes[i].legs[0].steps[1].start_location.toJSON());
+                         console.log(result.routes[i].legs[0].steps[1].start_point.toJSON());
+                         */
+                        new google.maps.DirectionsRenderer({map: map, directions: result, routeIndex: i, polylineOptions: {strokeWeight: 5, strokeColor: '#' + Math.floor(Math.random() * 16777215).toString(16)}});
                         for (var ii = 0; result.routes[i].legs[0].steps.length > ii; ii++) {
                             (function () {
                                 var marker = new google.maps.Marker({map: map, position: result.routes[i].legs[0].steps[ii].start_location, animation: google.maps.Animation.DROP});
