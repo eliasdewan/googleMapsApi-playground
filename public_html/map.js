@@ -403,16 +403,26 @@ function button4() {
 
             var infoWindow = new google.maps.InfoWindow({position: location});
             const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({location: location}, function (results, status) {
-                if (status === 'OK') {
-                    infoWindow.setContent(results[0].formatted_address);
-                } else {
-                    console.log('Geocode was not successful for the following reason: ' + status);
-                    infoWindow.setContent('no address found');
-                }
-                google.maps.event.addListener(smarker, 'click', function () {
-                    infoWindow.open(map);
+
+            google.maps.event.addListener(smarker, 'click', function () {
+                geocoder.geocode({location: location}, function (results, status) {
+                    if (status === 'OK') {
+                        var contentHtml = '<h1>' + results[0].formatted_address + '</h1>';
+                        var addressLength = results[0].address_components.length;
+
+                        for (var ii = 1; addressLength > ii; ii++) {
+                            contentHtml += '<h' + (addressLength - ii) + '>' + results[0].address_components[ii].long_name + '</h' + (addressLength - ii) + '>';
+                        }
+
+                        infoWindow.setContent(contentHtml);
+                        console.log(results);
+                    } else {
+                        console.log('Geocode was not successful for the following reason: ' + status);
+                        infoWindow.setContent('no address found');
+                    }
                 });
+
+                infoWindow.open(map);
             });
         }
 
@@ -425,7 +435,7 @@ function button4() {
 
         var maxlat = square.getBounds().getNorthEast().lat() - square.getBounds().getSouthWest().lat();
         var maxlng = square.getBounds().getNorthEast().lng() - square.getBounds().getSouthWest().lng();
-        for (var i = 0; i <= 3; i++) {
+        for (var i = 0; i < 3; i++) {
             var loclng = location.latLng.lng() + (Math.random() * maxlng - maxlng / 2);
             var loclat = location.latLng.lat() + (Math.random() * maxlat - maxlat / 2);
             squareMarkers(new google.maps.LatLng(loclat, loclng));
