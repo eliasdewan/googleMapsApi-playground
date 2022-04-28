@@ -532,11 +532,6 @@ function button7() {
         var pointmarker = new google.maps.Marker({map: map, position: clickPoint.latLng, animation: google.maps.Animation.DROP, icon: micon});
         micon = "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_grey%23.png";
 
-
-
-
-
-
         google.maps.event.addListener(pointmarker, 'click', () => {
             (function () {
                 if (openWindow !== null) {
