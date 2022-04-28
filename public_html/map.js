@@ -462,8 +462,8 @@ function button5() {
         area.setOptions({paths: points});
         boundsofPolygon.extend(clicklocation.latLng);
 
-        if (points.length >= 4) {
-            google.maps.event.removeListener(addPointAction);
+        if (points.length >= 3) {
+            //google.maps.event.removeListener(addPointAction); // comment out to stop adding more point with clicks
             var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
             var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
 
