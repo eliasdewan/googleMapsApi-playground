@@ -445,7 +445,6 @@ function button4() {
 
 
 function button5() {
-    console.log('button 5');
     google.maps.event.clearListeners(map, 'click');
     var area = new google.maps.Polygon({
         strokeColor: "#00ff00",
@@ -462,27 +461,8 @@ function button5() {
         area.setOptions({paths: points});
         boundsofPolygon.extend(clicklocation.latLng);
 
-        new google.maps.Marker({
-            position: clicklocation.latLng,
-            map: map,
-            icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_green.png"
-        });
-
-
-
-        console.log(boundsofPolygon);
         if (points.length >= 4) {
             google.maps.event.removeListener(addPointAction);
-            new google.maps.Marker({
-                position: boundsofPolygon.getNorthEast(),
-                map: map,
-                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"
-            });
-            new google.maps.Marker({
-                position: boundsofPolygon.getSouthWest(),
-                map: map,
-                icon: "https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_white+.png"
-            });
             var areaLat = boundsofPolygon.getNorthEast().lat() - boundsofPolygon.getSouthWest().lat();
             var areaLng = boundsofPolygon.getNorthEast().lng() - boundsofPolygon.getSouthWest().lng();
 
@@ -493,7 +473,6 @@ function button5() {
             }
             var heatmapData = [];
             var hundredMarkers = [];
-
 
             google.maps.event.addListener(area, 'mouseover', () => {
                 density.setMap(null); // 
