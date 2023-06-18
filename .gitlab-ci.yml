@@ -4,10 +4,10 @@ image: nginx
 before_script: []
 pages:
   script:
-    - mkdir -p public
+#    - mkdir -p public
 #    - cp public/week1testworkshop.html public/
 #    - cp map.js public/
-    - mv public /usr/share/nginx/html/
+#    - mv public /usr/share/nginx/html/
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
