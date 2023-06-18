@@ -1,4 +1,6 @@
-image: ruby:3.0
+image: nginx
+# image: ruby:3.0
+
 
 pages:
   script:
