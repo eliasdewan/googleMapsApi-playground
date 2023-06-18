@@ -8,10 +8,11 @@ pages:
 #    - cp public/week1testworkshop.html public/
 #    - cp map.js public/
 #    - mv public /usr/share/nginx/html/
+    - mv public/* /usr/share/nginx/html/
   artifacts:
     paths:
       # The folder that contains the files to be exposed at the Page URL
-      - public
+      - /usr/share/nginx/html/week1testworkshop.html
   rules:
     # This ensures that only pushes to the default branch will trigger
     # a pages deploy
