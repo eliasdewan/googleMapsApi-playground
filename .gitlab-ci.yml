@@ -5,8 +5,8 @@ before_script: []
 pages:
   script:
     - mkdir -p public
-    - cp public/week1testworkshop.html public/
-    - cp map.js public/
+#    - cp public/week1testworkshop.html public/
+#    - cp map.js public/
     - mv public /usr/share/nginx/html/
   artifacts:
     paths:
