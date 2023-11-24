@@ -1,6 +1,4 @@
-
 https://big.eliatheone.uk/
-https://www.youtube.com/watch?v=-Elp8-Boc4I
 
 previous 
 https://googlemaps-dk5.pages.dev/
