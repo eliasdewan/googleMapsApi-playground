@@ -1,6 +1,7 @@
-> Api expired, limited functionality using the link below
-Follow this link for live preview: https://big.eliatheone.uk/
- >> Find the gifs at the bottom for preview
+> Api expired, limited functionality using the link
+> 
+> Follow this link for live preview: https://big.eliatheone.uk/
+ >> Find the gifs at the bottom for preview when it is paired with a working API key
 
 HTML with javascript and Google Maps API
 - [Button 1: auto start just click button 1](#action-1-and-2)
