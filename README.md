@@ -32,7 +32,6 @@ Google API did free tier did expire so many functions font work
 ## Action 7 
 ### Place two markers to outline the best 3 turn-by-turn directions, with makers on each turn including starting and end. All markers are in random colour. 
 ![Sixth action](/examples/maps_6.1.gif "Sixth action")
-##Action 7 Extended
 ### All markers have on-click interactive street view on the info window, the info window moves with the streetview interaction.
 ![Seventh action](/examples/maps_6.2.gif "Seventh action")
 ### Action 7 - different location
