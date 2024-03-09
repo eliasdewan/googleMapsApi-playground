@@ -1,5 +1,4 @@
-> Api expired, limited functionality using the link
-> 
+# Learning project - Using google maps api, implemented some practical actions that could be used in real use cases
 > Follow this link for live preview: https://big.eliatheone.uk/
  >> Find the gifs at the bottom for preview when it is paired with a working API key
 
