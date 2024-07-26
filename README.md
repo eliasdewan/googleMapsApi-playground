@@ -1,5 +1,5 @@
 # Learning project - Using google maps api, implemented some practical actions that could be used in real use cases
-> Follow this link for live preview: https://big.eliatheone.uk/
+> Follow this link for live preview: [https://big.eliatheone.uk/](https://googlemaps-api.pages.dev/) - API key is disabled , limited functionlaity. Check previews below for demonstration
  >> Find the gifs at the bottom for preview when it is paired with a working API key
 
 HTML with javascript and Google Maps API
